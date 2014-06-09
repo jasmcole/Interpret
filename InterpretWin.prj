@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment-project plugin="plugin.deploytool" plugin-version="1.0">
+  <configuration target="target.standalone.win" target-name="Windows Standalone Application" name="InterpretWin" location="H:\Dropbox\MATLAB\Interferometer Analysis" file="H:\Dropbox\MATLAB\Interferometer Analysis\InterpretWin.prj" build-checksum="3572048210">
+    <param.project.name>H:\Dropbox\MATLAB\Interferometer Analysis\InterpretWin.prj</param.project.name>
+    <param.target.type>Windows Standalone Application</param.target.type>
+    <param.appname>InterpretWin</param.appname>
+    <param.intermediate>${PROJECT_ROOT}\InterpretWin\src</param.intermediate>
+    <param.output>${PROJECT_ROOT}\InterpretWin\distrib</param.output>
+    <param.embed.ctf>true</param.embed.ctf>
+    <param.tbx_on_path>
+      <item>all</item>
+    </param.tbx_on_path>
+    <param.warnings>
+      <warning.fullpath>on</warning.fullpath>
+      <warning.duplicate>on</warning.duplicate>
+      <warning.option.ignored>on</warning.option.ignored>
+      <warning.libname>on</warning.libname>
+      <warning.demo>on</warning.demo>
+    </param.warnings>
+    <param.version>1.0</param.version>
+    <param.user.only.registration>false</param.user.only.registration>
+    <param.c.cpp.options.file />
+    <param.include.dirs />
+    <param.lib.dirs />
+    <param.lib.files />
+    <param.defines />
+    <param.undefines />
+    <param.debug>false</param.debug>
+    <param.share.mcr>false</param.share.mcr>
+    <param.disable.jvm>false</param.disable.jvm>
+    <param.disable.display>false</param.disable.display>
+    <param.create.log>false</param.create.log>
+    <param.log.file />
+    <param.user.defined.mcr.options />
+    <unset>
+      <param.project.name />
+      <param.target.type />
+      <param.appname />
+      <param.intermediate />
+      <param.output />
+      <param.embed.ctf />
+      <param.tbx_on_path />
+      <param.warnings />
+      <param.version />
+      <param.user.only.registration />
+      <param.c.cpp.options.file />
+      <param.include.dirs />
+      <param.lib.dirs />
+      <param.lib.files />
+      <param.defines />
+      <param.undefines />
+      <param.debug />
+      <param.share.mcr />
+      <param.disable.jvm />
+      <param.disable.display />
+      <param.create.log />
+      <param.log.file />
+      <param.user.defined.mcr.options />
+    </unset>
+    <fileset.main>
+      <file>${PROJECT_ROOT}\InterpretWin.m</file>
+    </fileset.main>
+    <fileset.resources />
+    <fileset.package>
+      <file special-file="file.mcr" reference-mode="direct">${MATLAB_ROOT}\toolbox\compiler\deploy\win64\MCRInstaller.exe</file>
+    </fileset.package>
+    <build-deliverables>
+      <file name="readme.txt" location="${PROJECT_ROOT}\InterpretWin\distrib" optional="true">H:\Dropbox\MATLAB\Interferometer Analysis\InterpretWin\distrib\readme.txt</file>
+      <file name="InterpretWin.exe" location="${PROJECT_ROOT}\InterpretWin\distrib" optional="false">H:\Dropbox\MATLAB\Interferometer Analysis\InterpretWin\distrib\InterpretWin.exe</file>
+    </build-deliverables>
+    <workflow />
+    <matlab>
+      <root>H:\Programs\Matlab</root>
+      <path>
+        <directory>${PROJECT_ROOT}\InterpretSource</directory>
+        <directory>H:\Dropbox\MATLAB</directory>
+        <directory>H:\Dropbox\MATLAB\Andor SIF File Reader</directory>
+        <directory>H:\Dropbox\MATLAB\EPOCH</directory>
+        <directory>H:\Dropbox\MATLAB\EPOCH\EpochGUI4.8.2</directory>
+        <directory>H:\Dropbox\MATLAB\EPOCH\EpochGUI4.8.2\EpochGUI4.8.2</directory>
+        <directory>H:\Dropbox\MATLAB\FDTD_Toolbox</directory>
+        <directory>H:\Dropbox\MATLAB\FDTD_Toolbox\FDTD-Toolbox</directory>
+        <directory>H:\Dropbox\MATLAB\GUI Test</directory>
+        <directory>H:\Dropbox\MATLAB\Gaussian Beam</directory>
+        <directory>H:\Dropbox\MATLAB\Gemini 2012</directory>
+        <directory>H:\Dropbox\MATLAB\Gemini 2012\Espec</directory>
+        <directory>H:\Dropbox\MATLAB\Gemini 2012\Espec\To be uploaded</directory>
+        <directory>H:\Dropbox\MATLAB\Gemini 2012\Ionisation Injection</directory>
+        <directory>H:\Dropbox\MATLAB\Gemini 2012\RSS Sims</directory>
+        <directory>H:\Dropbox\MATLAB\Gemini Betatron 2013</directory>
+        <directory>H:\Dropbox\MATLAB\Gemini Betatron 2013\Espec</directory>
+        <directory>H:\Dropbox\MATLAB\Gemini Betatron 2013\Tomography</directory>
+        <directory>H:\Dropbox\MATLAB\Gemini Betatron 2013\Tomography\Imported Components</directory>
+        <directory>H:\Dropbox\MATLAB\Gemini Betatron 2013\Tomography\Imported Components\IS2</directory>
+        <directory>H:\Dropbox\MATLAB\Gemini Betatron 2013\Tomography\Imported Components\IS3</directory>
+        <directory>H:\Dropbox\MATLAB\Gemini Betatron 2013\Tomography\Movie</directory>
+        <directory>H:\Dropbox\MATLAB\Gemini Positron</directory>
+        <directory>H:\Dropbox\MATLAB\Gemini Sarri 2 Beam</directory>
+        <directory>H:\Dropbox\MATLAB\GeminiMurphy2013</directory>
+        <directory>H:\Dropbox\MATLAB\GeminiMurphy2013\Espec</directory>
+        <directory>H:\Dropbox\MATLAB\GeminiMurphy2013\Espec\bin</directory>
+        <directory>H:\Dropbox\MATLAB\GeminiMurphy2013\Espec\run</directory>
+        <directory>H:\Dropbox\MATLAB\ICT_release</directory>
+        <directory>H:\Dropbox\MATLAB\ICT_release\version1.0</directory>
+        <directory>H:\Dropbox\MATLAB\ICT_release\version1.0\Gemini 2012 Lookup Tables</directory>
+        <directory>H:\Dropbox\MATLAB\ICT_release\version1.0\ICT_B_field_maps</directory>
+        <directory>H:\Dropbox\MATLAB\Interferometer Analysis</directory>
+        <directory>${PROJECT_ROOT}\InterpretSource</directory>
+        <directory>H:\Dropbox\MATLAB\Jena 2013</directory>
+        <directory>H:\Dropbox\MATLAB\SPH</directory>
+        <directory>H:\Dropbox\MATLAB\Shadowgraphy</directory>
+        <directory>H:\Dropbox\MATLAB\Shadowgraphy\Paper Figures</directory>
+        <directory>H:\Dropbox\MATLAB\Shadowgraphy\Paper Figures\New Run</directory>
+        <directory>H:\Dropbox\MATLAB\Shadowgraphy\Stuart3 - 1um steps</directory>
+        <directory>H:\Dropbox\MATLAB\StingrayCapture</directory>
+        <directory>H:\Dropbox\MATLAB\StingrayCapture\distrib</directory>
+        <directory>H:\Dropbox\MATLAB\StingrayCapture\distrib\TestDeployment.app</directory>
+        <directory>H:\Dropbox\MATLAB\StingrayCapture\distrib\TestDeployment.app\Contents</directory>
+        <directory>H:\Dropbox\MATLAB\StingrayCapture\distrib\TestDeployment.app\Contents\MacOS</directory>
+        <directory>H:\Dropbox\MATLAB\StingrayCapture\distrib\TestDeployment.app\Contents\Resources</directory>
+        <directory>H:\Dropbox\MATLAB\StingrayCapture\distrib\TestDeployment.app\Contents\Resources\English.lproj</directory>
+        <directory>H:\Dropbox\MATLAB\StingrayCapture\src</directory>
+        <directory>H:\Dropbox\MATLAB\StingrayCapture\src\TestDeployment.app</directory>
+        <directory>H:\Dropbox\MATLAB\StingrayCapture\src\TestDeployment.app\Contents</directory>
+        <directory>H:\Dropbox\MATLAB\StingrayCapture\src\TestDeployment.app\Contents\MacOS</directory>
+        <directory>H:\Dropbox\MATLAB\StingrayCapture\src\TestDeployment.app\Contents\Resources</directory>
+        <directory>H:\Dropbox\MATLAB\StingrayCapture\src\TestDeployment.app\Contents\Resources\English.lproj</directory>
+        <directory>H:\Dropbox\MATLAB\TA2 2012 Data Analysis</directory>
+        <directory>H:\Dropbox\MATLAB\TA2 2012 Data Analysis\Grenouille Images</directory>
+        <directory>H:\Dropbox\MATLAB\TA2 2012 Data Analysis\TA2 2012 Data Analysis (Paddington)</directory>
+        <directory>H:\Dropbox\MATLAB\TA2 2012 Data Analysis\TA2 2012 Data Analysis (Paddington)\20120614r001</directory>
+        <directory>H:\Dropbox\MATLAB\adaptivethreshold</directory>
+        <directory>H:\Dropbox\MATLAB\exportfig</directory>
+        <directory>H:\Dropbox\MATLAB\iso2mesh</directory>
+        <directory>H:\Dropbox\MATLAB\iso2mesh\bin</directory>
+        <directory>H:\Dropbox\MATLAB\iso2mesh\doc</directory>
+        <directory>H:\Dropbox\MATLAB\iso2mesh\sample</directory>
+        <directory>H:\Dropbox\MATLAB\sauvola</directory>
+        <directory>H:\Dropbox\MATLAB\smoothpatch_version1b</directory>
+        <directory>C:\Users\Jason\Documents\MATLAB</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\demos</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\graph2d</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\graph3d</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\graphics</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\plottools</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\scribe</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\specgraph</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\uitools</directory>
+        <directory>${MATLAB_ROOT}\toolbox\local</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\optimfun</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\codetools</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\datafun</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\datamanager</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\datatypes</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\elfun</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\elmat</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\funfun</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\general</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\guide</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\helptools</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\iofun</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\lang</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\matfun</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\ops</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\polyfun</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\randfun</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\sparfun</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\specfun</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\strfun</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\timefun</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\verctrl</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\winfun</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\winfun\net</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\apps</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\audiovideo</directory>
+        <directory>${MATLAB_ROOT}\toolbox\coder\matlabcoder</directory>
+        <directory>${MATLAB_ROOT}\toolbox\coder\codegendemos</directory>
+        <directory>${MATLAB_ROOT}\toolbox\coder\emlcodermex</directory>
+        <directory>${MATLAB_ROOT}\toolbox\rtw\rtw</directory>
+        <directory>${MATLAB_ROOT}\toolbox\rtw\targets\shared</directory>
+        <directory>${MATLAB_ROOT}\toolbox\rtw\coder_foundation\tfl</directory>
+        <directory>${MATLAB_ROOT}\toolbox\rtw\coder_foundation\build</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\simtargets</directory>
+        <directory>${MATLAB_ROOT}\toolbox\coder\coder</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\comparisons</directory>
+        <directory>${MATLAB_ROOT}\toolbox\compiler</directory>
+        <directory>${MATLAB_ROOT}\toolbox\compiler\compilerdemos</directory>
+        <directory>${MATLAB_ROOT}\toolbox\curvefit\curvefit</directory>
+        <directory>${MATLAB_ROOT}\toolbox\curvefit\splines</directory>
+        <directory>${MATLAB_ROOT}\toolbox\curvefit\cftoolgui</directory>
+        <directory>${MATLAB_ROOT}\toolbox\curvefit\sftoolgui</directory>
+        <directory>${MATLAB_ROOT}\toolbox\curvefit\curvefitdemos</directory>
+        <directory>${MATLAB_ROOT}\toolbox\daq\daq</directory>
+        <directory>${MATLAB_ROOT}\toolbox\daq\daqguis</directory>
+        <directory>${MATLAB_ROOT}\toolbox\daq\daqdemos</directory>
+        <directory>${MATLAB_ROOT}\toolbox\database\database</directory>
+        <directory>${MATLAB_ROOT}\toolbox\database\vqb</directory>
+        <directory>${MATLAB_ROOT}\toolbox\database\dbdemos</directory>
+        <directory>${MATLAB_ROOT}\toolbox\distcomp</directory>
+        <directory>${MATLAB_ROOT}\toolbox\distcomp\distcomp</directory>
+        <directory>${MATLAB_ROOT}\toolbox\distcomp\user</directory>
+        <directory>${MATLAB_ROOT}\toolbox\distcomp\mpi</directory>
+        <directory>${MATLAB_ROOT}\toolbox\distcomp\parallel</directory>
+        <directory>${MATLAB_ROOT}\toolbox\distcomp\parallel\util</directory>
+        <directory>${MATLAB_ROOT}\toolbox\distcomp\lang</directory>
+        <directory>${MATLAB_ROOT}\toolbox\distcomp\cluster</directory>
+        <directory>${MATLAB_ROOT}\toolbox\distcomp\gpu</directory>
+        <directory>${MATLAB_ROOT}\toolbox\distcomp\array</directory>
+        <directory>${MATLAB_ROOT}\toolbox\distcomp\pctdemos</directory>
+        <directory>${MATLAB_ROOT}\toolbox\dotnetbuilder\dotnetbuilder</directory>
+        <directory>${MATLAB_ROOT}\toolbox\dotnetbuilder\dotnetbuilderdemos</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\dsp\simulink\dsp</directory>
+        <directory>${MATLAB_ROOT}\toolbox\eml\eml</directory>
+        <directory>${MATLAB_ROOT}\toolbox\exlink</directory>
+        <directory>${MATLAB_ROOT}\toolbox\fixedpoint\fixedpoint</directory>
+        <directory>${MATLAB_ROOT}\toolbox\coder\float2fixed</directory>
+        <directory>${MATLAB_ROOT}\toolbox\globaloptim</directory>
+        <directory>${MATLAB_ROOT}\toolbox\globaloptim\globaloptim</directory>
+        <directory>${MATLAB_ROOT}\toolbox\globaloptim\globaloptimdemos</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\extensions\adivdsp</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\extensions\adivdsp\mdlinfo</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\extensions\adivdsp\tfl</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\extensions\adivdsp\vdspblks</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\extensions\adivdsp\rtw</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\extensions\eclipseide</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\extensions\eclipseide\mdlinfo</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\extensions\eclipseide\registry</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\extensions\eclipseide\tfl</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\extensions\iarew</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\extensions\iarew\blks</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\extensions\iarew\mdlinfo</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\extensions\iarew\templates</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\extensions\ticcs</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\extensions\ticcs\ccsblks</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\extensions\ticcs\ccslinkblks</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\extensions\ticcs\ccslinkblks\rtdxsimblks</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\extensions\ticcs\lic</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\extensions\ticcs\mdlinfo</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\extensions\ticcs\tfl</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\extensions\ticcs\util</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\extensions\ticcs\rtw</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\extensions\ticcs\envchecker</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\extensions\wrworkbench</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\extensions\wrworkbench\mdlinfo</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\extensions\wrworkbench\registry</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\extensions\wrworkbench\wrworkbenchblks</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\foundation\pjtgenerator</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\foundation\pjtgenerator\rtw</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\foundation\pjtgenerator\tgtpref2</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\foundation\pjtgenerator\profiler</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\foundation\pjtgenerator\mdlinfo</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\foundation\pjtgenerator\blks</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\foundation\pjtgenerator\blks\masks</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\foundation\pjtgenerator\blks\tlc_c</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\foundation</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\foundation\autointerface</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\foundation\autointerface\ideregisterplugins</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\foundation\util</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\foundation\errorhandler</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\foundation\xmakefile</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\foundation\hookpoints</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\idelinkdemos</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\extensions\adivdsp\vdspdemos</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\extensions\eclipseide\eclipseidedemos</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\extensions\iarew\iarewdemos</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\extensions\ticcs\ccsdemos</directory>
+        <directory>${MATLAB_ROOT}\toolbox\idelink\extensions\ticcs\ccsdemos\util</directory>
+        <directory>${MATLAB_ROOT}\toolbox\images\colorspaces</directory>
+        <directory>${MATLAB_ROOT}\toolbox\images\images</directory>
+        <directory>${MATLAB_ROOT}\toolbox\images\imuitools</directory>
+        <directory>${MATLAB_ROOT}\toolbox\images\iptformats</directory>
+        <directory>${MATLAB_ROOT}\toolbox\images\iptutils</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\imagesci</directory>
+        <directory>${MATLAB_ROOT}\toolbox\images\imdemos</directory>
+        <directory>${MATLAB_ROOT}\toolbox\imaq\imaq</directory>
+        <directory>${MATLAB_ROOT}\toolbox\imaq\imaqblks\imaqblks</directory>
+        <directory>${MATLAB_ROOT}\toolbox\imaq\imaqblks\imaqmasks</directory>
+        <directory>${MATLAB_ROOT}\toolbox\imaq\imaqblks\imaqmex</directory>
+        <directory>${MATLAB_ROOT}\toolbox\imaq\imaqdemos</directory>
+        <directory>${MATLAB_ROOT}\toolbox\instrument\instrument</directory>
+        <directory>${MATLAB_ROOT}\toolbox\instrument\instrumentblks\instrumentblks</directory>
+        <directory>${MATLAB_ROOT}\toolbox\instrument\instrumentblks\instrumentmex</directory>
+        <directory>${MATLAB_ROOT}\toolbox\instrument\instrumentblks\instrumentmasks</directory>
+        <directory>${MATLAB_ROOT}\toolbox\instrument\instrumentdemos</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\instrument</directory>
+        <directory>${MATLAB_ROOT}\toolbox\sam\m3i</directory>
+        <directory>${MATLAB_ROOT}\toolbox\nnet</directory>
+        <directory>${MATLAB_ROOT}\toolbox\nnet\nncontrol</directory>
+        <directory>${MATLAB_ROOT}\toolbox\nnet\nndemos</directory>
+        <directory>${MATLAB_ROOT}\toolbox\nnet\nndemos\nndatasets</directory>
+        <directory>${MATLAB_ROOT}\toolbox\nnet\nnet</directory>
+        <directory>${MATLAB_ROOT}\toolbox\nnet\nnet\nnadapt</directory>
+        <directory>${MATLAB_ROOT}\toolbox\nnet\nnet\nndatafun</directory>
+        <directory>${MATLAB_ROOT}\toolbox\nnet\nnet\nnderivative</directory>
+        <directory>${MATLAB_ROOT}\toolbox\nnet\nnet\nndistance</directory>
+        <directory>${MATLAB_ROOT}\toolbox\nnet\nnet\nndivision</directory>
+        <directory>${MATLAB_ROOT}\toolbox\nnet\nnet\nninitlayer</directory>
+        <directory>${MATLAB_ROOT}\toolbox\nnet\nnet\nninitnetwork</directory>
+        <directory>${MATLAB_ROOT}\toolbox\nnet\nnet\nninitweight</directory>
+        <directory>${MATLAB_ROOT}\toolbox\nnet\nnet\nnlearn</directory>
+        <directory>${MATLAB_ROOT}\toolbox\nnet\nnet\nnnetfun</directory>
+        <directory>${MATLAB_ROOT}\toolbox\nnet\nnet\nnnetinput</directory>
+        <directory>${MATLAB_ROOT}\toolbox\nnet\nnet\nnnetwork</directory>
+        <directory>${MATLAB_ROOT}\toolbox\nnet\nnet\nnperformance</directory>
+        <directory>${MATLAB_ROOT}\toolbox\nnet\nnet\nnplot</directory>
+        <directory>${MATLAB_ROOT}\toolbox\nnet\nnet\nnprocess</directory>
+        <directory>${MATLAB_ROOT}\toolbox\nnet\nnet\nnsearch</directory>
+        <directory>${MATLAB_ROOT}\toolbox\nnet\nnet\nntopology</directory>
+        <directory>${MATLAB_ROOT}\toolbox\nnet\nnet\nntrain</directory>
+        <directory>${MATLAB_ROOT}\toolbox\nnet\nnet\nntransfer</directory>
+        <directory>${MATLAB_ROOT}\toolbox\nnet\nnet\nnweight</directory>
+        <directory>${MATLAB_ROOT}\toolbox\nnet\nnguis</directory>
+        <directory>${MATLAB_ROOT}\toolbox\nnet\nnobsolete</directory>
+        <directory>${MATLAB_ROOT}\toolbox\nnet\nnutils</directory>
+        <directory>${MATLAB_ROOT}\toolbox\optim\optim</directory>
+        <directory>${MATLAB_ROOT}\toolbox\optim\optimdemos</directory>
+        <directory>${MATLAB_ROOT}\toolbox\pde</directory>
+        <directory>${MATLAB_ROOT}\toolbox\pde\pdedemos</directory>
+        <directory>${MATLAB_ROOT}\toolbox\rtw\targets\rtwin\rtwin</directory>
+        <directory>${MATLAB_ROOT}\toolbox\rtw\targets\rtwin\rtwindemos</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\asynciolib</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\can</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\can\canblks</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\can\canmasks</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\can\canmex</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\coder\coder</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\configset</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\controllib\general</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\controllib\graphics</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\controllib\graphics\utils</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\controllib\graphics\plotoptions</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\curvefitlib</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\dastudio</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\dspblks\dspblks</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\dspblks\dspmex</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\filterdesignlib</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\imageslib</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\imaqlib</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\measure</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\multimedia</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\optimlib</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\rptgen</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\siglib</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\spcuilib</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\statslib</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\system\coder</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\system\fixedpoint</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\system\sfun</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\testmeaslib\general</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\testmeaslib\graphics</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\testmeaslib\simulink</directory>
+        <directory>${MATLAB_ROOT}\toolbox\signal\signal</directory>
+        <directory>${MATLAB_ROOT}\toolbox\signal\sigtools</directory>
+        <directory>${MATLAB_ROOT}\toolbox\signal\sptoolgui</directory>
+        <directory>${MATLAB_ROOT}\toolbox\signal\sigdemos</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\simulink</directory>
+        <directory>${MATLAB_ROOT}\toolbox\stats\stats</directory>
+        <directory>${MATLAB_ROOT}\toolbox\stats\classreg</directory>
+        <directory>${MATLAB_ROOT}\toolbox\stats\statsdemos</directory>
+        <directory>${MATLAB_ROOT}\toolbox\symbolic\symbolic</directory>
+        <directory>${MATLAB_ROOT}\toolbox\symbolic\symbolicdemos</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\system</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\processor\blackfin</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\processor\blackfin\blks</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\processor\blackfin\blks\mex</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\processor\blackfin\blks\masks</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\processor\blackfin\blackfindemos</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\processor\intelhost\tfl</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\foundation</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\foundation\utils</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\foundation\utils\resource_config</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\foundation\blks</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\foundation\blks\mex</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\foundation\blks\masks</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\processor\shared</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\processor\shared\ti</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\processor\shared\ti\mdlinfo</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\processor\shared\ti\utils</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\processor\shared\ti\blks</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\processor\shared\ti\blks\mex</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\processor\shared\ti\blks\masks</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\etargets\etargets</directory>
+        <directory>${MATLAB_ROOT}\toolbox\shared\etargets\etargets\demoutils</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\targetdemos</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\processor\tic2000</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\processor\tic2000\rtw</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\processor\tic2000\utils</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\processor\tic2000\blks</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\processor\tic2000\blks\mex</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\processor\tic2000\blks\masks</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\processor\tic2000\tic2000demos</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\processor\tic5000</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\processor\tic5000\blks</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\processor\tic5000\blks\mex</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\processor\tic5000\blks\masks</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\processor\tic5000\tic5000demos</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\processor\tic6000</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\processor\tic6000\rtw</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\processor\tic6000\tfl</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\processor\tic6000\utils</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\processor\tic6000\blks</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\processor\tic6000\blks\mex</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\processor\tic6000\blks\sysobj_mex</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\processor\tic6000\blks\masks</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\processor\tic6000\tic6000demos\dataclasses</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\processor\tic6000\tic6000demos</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\operatingsystem\linux\blks</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\operatingsystem\linux\blks\masks</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\operatingsystem\linux\blks\mex</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\operatingsystem\linux\src</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\operatingsystem\vxworks\blks</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\operatingsystem\vxworks\blks\mex</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\operatingsystem\vxworks\blks\masks</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\operatingsystem\vxworks\src</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\operatingsystem\windows\blks</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\operatingsystem\windows\blks\masks</directory>
+        <directory>${MATLAB_ROOT}\toolbox\target\extensions\operatingsystem\windows\blks\mex</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\timeseries</directory>
+        <directory>${MATLAB_ROOT}\toolbox\matlab\hds</directory>
+        <directory>${MATLAB_ROOT}\toolbox\wavelet\wavelet</directory>
+        <directory>${MATLAB_ROOT}\toolbox\wavelet\wmultisig1d</directory>
+        <directory>${MATLAB_ROOT}\toolbox\wavelet\wavedemo</directory>
+        <directory>${MATLAB_ROOT}\toolbox\wavelet\compression</directory>
+        <directory>${MATLAB_ROOT}\toolbox\connector\connector</directory>
+      </path>
+    </matlab>
+    <platform>
+      <unix>false</unix>
+      <mac>false</mac>
+      <windows>true</windows>
+      <win2k>false</win2k>
+      <winxp>false</winxp>
+      <vista>true</vista>
+      <linux>false</linux>
+      <solaris>false</solaris>
+      <osver>6.2</osver>
+      <os32>false</os32>
+      <os64>true</os64>
+      <arch>win64</arch>
+      <matlab>true</matlab>
+    </platform>
+  </configuration>
+</deployment-project>
+
