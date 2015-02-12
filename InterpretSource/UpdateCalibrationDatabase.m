@@ -1,6 +1,6 @@
 function UpdateCalibrationDatabase(handles)
 
-copyfile('/Users/jmc208/Documents/MATLAB/Interpret/CalibrationDatabase.csv', '/Users/jmc208/Documents/MATLAB/Interpret/CalibrationDatabase_backup.csv')
+copyfile('CalibrationDatabase.csv', 'CalibrationDatabase_backup.csv')
 
 set(handles.StatusBox,'String','Saving calibration'); drawnow
 
@@ -14,7 +14,7 @@ if(strcmp(calibration, 'Default'))
 end
 assignin('base','calibration',calibration)
 
-data = read_mixed_csv('/Users/jmc208/Documents/MATLAB/Interpret/CalibrationDatabase.csv', ',');
+data = read_mixed_csv('CalibrationDatabase.csv', ',');
 [nparams nrecords] = size(data);
 
 found = 0;
