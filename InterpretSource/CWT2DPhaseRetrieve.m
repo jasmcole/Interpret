@@ -17,7 +17,7 @@ y = linspace(-0.5,0.5,ysize);
 
 [xg yg] = meshgrid(x,y);
 
-m = 2;
+m = 3;
 n = 2;
 
 lambda = (max(x) - min(x))/Nfringes;

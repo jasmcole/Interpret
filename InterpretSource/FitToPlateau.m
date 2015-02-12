@@ -25,7 +25,7 @@ phi = fliplr(phi);
 ymidautoflag = 1;
 [zsize ysize] = size(phi);
 
-if (ymidautoflag == 1)
+if (ymidautoflag == 100)
     % Auto ymid finder
     yaxis = 1:ysize;
     zpoints = 0.1:0.1:0.9;
@@ -89,6 +89,9 @@ for z_index = 1:zsize,
     drawnow
     
     rho(z_index, :) = rholine;
+    
+    phifitim(:,z_index)= phifit;
+    assignin('base', 'phifitim', phifitim);
     
 end
 

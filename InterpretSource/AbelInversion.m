@@ -42,7 +42,7 @@ if (calibdata.ymid == 0)
         ymid = round(ymid);
         set(handles.StatusBox, 'String', ['Selected ymid = ' num2str(ymid)]); drawnow
         line([ymid ymid], [0 1e4], 'color', 'white'); drawnow
-        arrowline([ymid 1.3*ymid], [zmid zmid]); drawnow
+        %arrowline([ymid 1.3*ymid], [zmid zmid]); drawnow
     end
     
 end

@@ -4,12 +4,13 @@ y = linspace(-0.5,0.5,640);
 kx = linspace(-pi/(x(2) - x(1)),pi/(x(2) - x(1)), length(x));
 ky = linspace(-pi/(y(2) - y(1)),pi/(y(2) - y(1)), length(y));
 [xg yg] = meshgrid(x,y);
-Nfringes = 50;
+Nfringes = 40;
 lambda = (max(x) - min(x))/Nfringes;
 alo = lambda/5;
 ahi = 3*lambda;
 phireal = 2*pi*xg/lambda + 30*exp(-yg.^2/0.2^2).*exp(-(xg - 0.5).^2/0.6^2);
 phireal = phireal + 10*exp(-(yg - 0.3).^2/0.01^2).*exp(-(xg + 0.2).^2/0.1^2);
+phireal = phireal + 7*exp(-(yg + 0.3).^2/0.05^2).*exp(-(xg + 0.0).^2/0.1^2);
 phireal = phireal - min(min(phireal));
 I = 1 + cos(phireal) + 2*perlin_noise(size(phireal)) + 0.3*randn(size(phireal));
 phireal = phireal - 2*pi*xg/lambda;
@@ -21,7 +22,7 @@ imagesc(phireal); fs14; title('\phi_{real}')
 subplot(3,2,6)
 imagesc(I); fs14; title('I_{real}')
 drawnow
-%%
+
 
 theta = linspace(-pi/2, 0.99*pi/2, 11);
 a = linspace(alo, ahi ,15);
@@ -45,19 +46,29 @@ thetapeak = fftshift(thetapeak);
 W = fftshift(Wold);
 
 phi = angle(W);
+phi(:,1:2) = phi(:,3:4);
 phi = unwrap(phi')';
+phi = unwrap(phi);
 
 phi = phi - 2*pi*xg/lambda;
 
 subplot(3,2,1)
 imagesc(apeak); fs14; title('\lambda_{calc}')
+set(gca, 'XTick', []); set(gca, 'YTick', [])
 subplot(3,2,2)
 imagesc(thetapeak); fs14; title('\theta_{calc}')
+set(gca, 'XTick', []); set(gca, 'YTick', [])
 subplot(3,2,3)
 imagesc(phi); fs14; title('\phi_{calc}')
+caxis([phi(1,1) 1.2*phi(466,320)])
+set(gca, 'XTick', []); set(gca, 'YTick', [])
 subplot(3,2,4)
 imagesc(real(W)); fs14; title('I_{calc}')
+set(gca, 'XTick', []); set(gca, 'YTick', [])
 subplot(3,2,5)
 imagesc(phireal); fs14; title('\phi_{real}')
+caxis([phireal(1,1) 1.2*phireal(466,320)])
+set(gca, 'XTick', []); set(gca, 'YTick', [])
 subplot(3,2,6)
 imagesc(I); fs14; title('I_{real}')
+set(gca, 'XTick', []); set(gca, 'YTick', [])

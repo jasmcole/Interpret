@@ -22,7 +22,7 @@ function varargout = IntGui(varargin)
 
 % Edit the above text to modify the response to help IntGui
 
-% Last Modified by GUIDE v2.5 04-Mar-2014 16:57:13
+% Last Modified by GUIDE v2.5 28-Jan-2015 14:04:23
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -605,8 +605,10 @@ end
 axes(handles.InterferogramAxes);
 set(handles.StatusBox,'String','Reading data file'); drawnow
 I = imread(filename);
-I = I - min(min(I));
+I = rgb2gray(I);
+I = I - min(I(:));
 imagesc(I)
+colormap jet
 caxis([0 2*mean(mean(I))])
 handles.dataimage = I;
 handles.originaldataimage = I;
@@ -961,6 +963,7 @@ function droboBtn_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 system('mkdir /Volumes/Drobo');
 system('mount_afp afp://vader.pp.ph.ic.ac.uk/Drobo /Volumes/Drobo');
+set(handles.StatusBox,'String','Drobo mounted'); drawnow
 
 
 % --- Executes on button press in umountDrobo.
@@ -969,6 +972,7 @@ function umountDrobo_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 system('umount /Volumes/Drobo');
+set(handles.StatusBox,'String','Drobo unmounted'); drawnow
 
 
 % --- Executes on button press in phaseContrastBtn.
@@ -989,3 +993,79 @@ handles.phase = csaps2(handles.phase, 0.1);
 axes(handles.PhaseAxes)
 imagesc(handles.phase); axis image xy
 guidata(hObject,handles)
+
+
+% --- Executes on button press in BatchBtn.
+function BatchBtn_Callback(hObject, eventdata, handles)
+% hObject    handle to BatchBtn (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+startshot = str2num(get(handles.BatchStartBox, 'string'));
+endshot = str2num(get(handles.BatchEndBox, 'string'));
+
+shots = startshot:1:endshot;
+
+InterpretDataBatch = struct;
+InterpretDataBatch.shots = shots;
+
+for n = 1:length(shots)
+    set(handles.ShotBox, 'string', num2str(shots(n)))
+    FileBut_Callback(hObject, eventdata, handles);
+    handles = guidata(hObject);
+    PhaseBut_Callback(hObject, eventdata, handles);
+    handles = guidata(hObject);
+    unwrapTopBtn_Callback(hObject, eventdata, handles);
+    handles = guidata(hObject);
+    rLeftBtn_Callback(hObject,eventdata,handles);
+    handles = guidata(hObject);
+    DensityBut_Callback(hObject, eventdata, handles)
+    handles = guidata(hObject);
+    rhobatch{n} = handles.rho;
+    InterpretDataBatch.rho = rhobatch;
+    assignin('base', 'InterpretDataBatch', InterpretDataBatch)
+end
+
+
+function BatchStartBox_Callback(hObject, eventdata, handles)
+% hObject    handle to BatchStartBox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of BatchStartBox as text
+%        str2double(get(hObject,'String')) returns contents of BatchStartBox as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function BatchStartBox_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to BatchStartBox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function BatchEndBox_Callback(hObject, eventdata, handles)
+% hObject    handle to BatchEndBox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of BatchEndBox as text
+%        str2double(get(hObject,'String')) returns contents of BatchEndBox as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function BatchEndBox_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to BatchEndBox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end

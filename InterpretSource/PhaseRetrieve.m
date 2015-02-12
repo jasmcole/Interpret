@@ -11,7 +11,9 @@ if (max([calibdata.xfft calibdata.yfft calibdata.wfft calibdata.hfft]) == 0)
     axes(handles.PhasediagAxes)
     set(handles.StatusBox, 'Value',0,'String','Select Fourier region'); drawnow
     imagesc(log(abs(fftshift(fftim))))
-    axis image xy
+    %axis image xy
+    xlim([0.4*length(fftim(1,:)) 0.6*length(fftim(1,:))])
+    ylim([0.2*length(fftim(:,1)) 0.8*length(fftim(:,1))])
     rect = getrect;
     x = round(rect(1));
     y = round(rect(2));
