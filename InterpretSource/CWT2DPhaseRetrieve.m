@@ -78,7 +78,7 @@ phaseref(:,end-9:end) = [];
 % subplot(3,2,6)
 % imagesc(I); fs14; title('I_{real}')
 
-phase = unwrap(phase' - phaseref')';
+phase = phase - phaseref;
 
 axes(handles.PhasediagAxes)
 imagesc(real(W))

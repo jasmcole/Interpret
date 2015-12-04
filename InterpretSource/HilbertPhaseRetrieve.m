@@ -41,7 +41,7 @@ for n = 1:nrows
         percentdone = [num2str(floor(100*n/nrows)) '%'];
         axes(handles.PhasediagAxes)
         x = 1:length(y);
-        plot(x,yplot,x,movav,x,ysmooth+movav)
+        plot(x,yplot,x,ysmooth+movav, x,movav)
         set(handles.StatusBox, 'String', ['Doing Hilbert transform...' percentdone]); drawnow
     end
     

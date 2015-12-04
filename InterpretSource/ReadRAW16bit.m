@@ -5,13 +5,16 @@ precision = 'uint16';
 offset = 0;
 interleave = 'bip'; % Also try bil or bip
 byteorder = 'ieee-be';%Little endian
-filename
 fileinfo = dir(filename);
 
-if(fileinfo.bytes > 1228800)
+if(fileinfo.bytes == 4456448)
+    width = 2048;
+    height = 1088;
+    byteorder = 'ieee-le';%Little endian
+elseif(fileinfo.bytes > 1228800)
     width = 1280;
     height = 960;
-else
+elseif(fileinfo.bytes < 1228800)
     width = 640;
     height = 480;
 end

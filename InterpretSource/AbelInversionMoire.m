@@ -14,40 +14,14 @@ x = {ysize,xsize};
 [Phi,p] = csaps(x,Phi,1,x);
 
 if (calibdata.ymid == 0)
-    
-    ymidautoflag = 0;
-    
-    if (ymidautoflag == 1)
-        % Auto ymid finder
-        [zsize ysize] = size(Phi);
-        yaxis = 1:ysize;
-        zpoints = 0.1:0.1:0.9;
-        zpoints = zpoints*zsize;
-        zpoints = round(zpoints);
-        for n = 1:length(zpoints)
-            yres(n) = trapz(Phi(zpoints(n),:).*yaxis)./trapz(Phi(zpoints(n),:));
-        end
-        ymid = round(mean(yres))
-        imagesc(Phi)
-        line([ymid ymid], [0 zsize], 'color', 'white')
-        hold on
-        scatter(yres, zpoints)
-        hold off
-        drawnow
-    else
-        % Interactive ymid finder
-        set(handles.StatusBox, 'String', 'Select symmetry axis'); drawnow
-        imagesc(Phi)
-        [ymid zmid] = ginput(1);
-        ymid = round(ymid);
-        set(handles.StatusBox, 'String', ['Selected ymid = ' num2str(ymid)]); drawnow
-        line([ymid ymid], [0 1e4], 'color', 'white'); drawnow
-        %arrowline([ymid 1.3*ymid], [zmid zmid]); drawnow
-    end
-    
-end
-
-if (calibdata.ymid > 0)
+    % Interactive ymid finder
+    set(handles.StatusBox, 'String', 'Select symmetry axis'); drawnow
+    imagesc(Phi)
+    [ymid zmid] = ginput(1);
+    ymid = round(ymid);
+    set(handles.StatusBox, 'String', ['Selected ymid = ' num2str(ymid)]); drawnow
+    line([ymid ymid], [0 1e4], 'color', 'white'); drawnow
+else
     ymid = calibdata.ymid;
 end
 
@@ -58,8 +32,8 @@ asmooth = calibdata.asmooth;
 
 lambda = lambda*1e-9;
 
-%n=1+k(rho/rho_atm)
-%rho_atm=(P/RT)*Na
+% n = 1 + k(rho/rho_atm)
+% rho_atm=(P/RT)*Na
 rho_atm=(101.325e3*6.022e23)/(8.31*273); %units m^-3
 
 switch gas
@@ -79,7 +53,7 @@ for z_index = 1:zsize,
     Philine = Phi(z_index,:);
     Philine = Philine(ymid:ysize);
     Philineold = Philine;
-    Philine = [fliplr(Philine) Philine];
+    Philine = [-fliplr(Philine) Philine];
     yaxis = 1:length(Philine);
     Philine = csaps(yaxis, Philine, asmooth, yaxis);
     Philine = Philine(end/2 + 1:end);
@@ -97,9 +71,8 @@ for z_index = 1:zsize,
         set(handles.StatusBox, 'String', ['Doing Abel inversion...' percentdone]); drawnow
     end
     
-    dPhidy = -gradient(Philine,1);
-    dPhidy = dPhidy/h;
-    dPhidy(1) = 0.1*dPhidy(2);
+    dPhidy = Philine;
+    dPhidy(1) = 0;
     
     for r_index = 1:ysize-ymid,
         for y_index = r_index:ysize - ymid + 1
@@ -109,8 +82,7 @@ for z_index = 1:zsize,
             
         end
         
-        %rho(z_index, r_index) = -1.4863e21*h*trapz(integrand);
-        rho(z_index, r_index) = ((lambda*rho_atm)/(2*pi^2*k))*h*trapz(integrand);
+        rho(z_index, r_index) = (rho_atm/(2*pi^2*k))*(1e-3*calibdata.Moire_p_um/calibdata.Moire_d_mm)*h*trapz(integrand);
         integrand(end) = [];
     end
     

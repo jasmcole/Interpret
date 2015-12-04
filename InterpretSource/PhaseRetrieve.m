@@ -29,10 +29,21 @@ end
 
 fftim = fftshift(fftim);
 fftref = fftshift(fftref);
-newfftim = zeros(size(data));
-newfftref = zeros(size(data));
-newfftim(y:y+h, x:x+w) = fftim(y:y+h, x:x+w);
-newfftref(y:y+h, x:x+w) = fftref(y:y+h, x:x+w);
+
+pow = 16;
+[Ny Nx] = size(fftim);
+[xg yg] = meshgrid(1:Nx, 1:Ny);
+mask = exp( -((xg - x - w/2).^pow)/((w/2)^pow)).*exp( -((yg - y - h/2).^pow)/((h/2)^pow));
+
+%newfftim = zeros(size(data));
+%newfftref = zeros(size(data));
+%newfftim(y:y+h, x:x+w) = fftim(y:y+h, x:x+w);
+%newfftref(y:y+h, x:x+w) = fftref(y:y+h, x:x+w);
+
+newfftim = mask.*fftim;
+newfftref = mask.*fftref;
+
+
 newfftim = double(newfftim);
 newfftref = double(newfftref);
 newfftim = fftshift(newfftim);
@@ -53,8 +64,8 @@ mag = abs(datafiltered./reffiltered);
 axes(handles.PhaseAxes)
 imagesc(phase); axis image xy; colorbar
 axes(handles.PhasediagAxes)
-imagesc(sin(phase)); axis image xy
-
-phase = phase;
+imagesc(mask)
+xlim([0.4*length(fftim(1,:)) 0.6*length(fftim(1,:))])
+ylim([0.2*length(fftim(:,1)) 0.8*length(fftim(:,1))])
 
 end

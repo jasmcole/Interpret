@@ -22,7 +22,7 @@ function varargout = IntGui(varargin)
 
 % Edit the above text to modify the response to help IntGui
 
-% Last Modified by GUIDE v2.5 28-Jan-2015 14:04:23
+% Last Modified by GUIDE v2.5 01-Jul-2015 10:38:12
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -305,6 +305,9 @@ if(isfield(calibdata, 'Name'))
             I = ReadRAW16bit(calibdata.reference);
         else
             I = imread(calibdata.reference);
+            if(length(size(I)) > 2)
+                I = rgb2gray(I);
+            end
         end
         I = I - min(min(I));
     end
@@ -368,6 +371,9 @@ if (strcmp(filename(end-2:end), 'raw'))
     I = ReadRAW16bit(filename);
 else
     I = imread(filename);
+    if(length(size(I)) > 2)
+        I = rgb2gray(I);
+    end
 end
 I(isnan(I)) = 0;
 I = I - min(min(I));
@@ -568,6 +574,8 @@ switch RetrievalType
         [rho,xaxis,yaxis,rhomean] = AbelInversion(phase, calibdata, medium, lambda, rhoplotflag, handles);
     case 'Trapezoidal Fit'
         rho = FitToPlateau(phase, calibdata, medium, lambda, rhoplotflag);
+    case 'Moire Abel Inversion'
+        [rho,xaxis,yaxis,rhomean] = AbelInversionMoire(phase, calibdata, medium, lambda, rhoplotflag, handles);
 end
 
 assignin('base','rho',rho)
@@ -604,8 +612,15 @@ end
 
 axes(handles.InterferogramAxes);
 set(handles.StatusBox,'String','Reading data file'); drawnow
-I = imread(filename);
-I = rgb2gray(I);
+
+if(strcmp(filename(end-2:end), 'raw'))
+    I = ReadRAW16bit(filename);
+else
+    I = imread(filename);
+    if(length(size(I)) > 2)
+        I = rgb2gray(I);
+    end
+end
 I = I - min(I(:));
 imagesc(I)
 colormap jet
@@ -751,9 +766,13 @@ output = struct;
 output.phase = handles.phase;
 output.datafile = handles.datafile;
 output.reffile = handles.calibdata.reference;
-output.rho = handles.rho;
-output.xaxis = handles.xaxis;
-output.yaxis = handles.yaxis;
+if(isfield(handles, 'rho'))
+    output.rho = handles.rho;
+end
+if(isfield(handles, 'xaxis'))
+    output.xaxis = handles.xaxis;
+    output.yaxis = handles.yaxis;
+end
 assignin('base','InterpretData',output)
 guidata(hObject, handles)
 
@@ -1010,18 +1029,44 @@ InterpretDataBatch.shots = shots;
 
 for n = 1:length(shots)
     set(handles.ShotBox, 'string', num2str(shots(n)))
+    
     FileBut_Callback(hObject, eventdata, handles);
     handles = guidata(hObject);
+    
     PhaseBut_Callback(hObject, eventdata, handles);
     handles = guidata(hObject);
-    unwrapTopBtn_Callback(hObject, eventdata, handles);
-    handles = guidata(hObject);
-    rLeftBtn_Callback(hObject,eventdata,handles);
-    handles = guidata(hObject);
+    
+    commandlist = EditableBatchCommands();
+    
+    for c = 1:length(commandlist)
+        switch(commandlist{c})
+            case 'Rotate left'
+                rLeftBtn_Callback(hObject,eventdata,handles);
+            case 'Rotate right'
+                rRightBtn_Callback(hObject,eventdata,handles);
+            case 'Unwrap left'
+                unwrapLeftBtn_Callback(hObject,eventdata,handles);
+            case 'Unwrap right'
+                unwrapRightBtn_Callback(hObject,eventdata,handles);
+            case 'Unwrap top'
+                unwrapTopBtn_Callback(hObject,eventdata,handles);
+            case 'Unwrap bottom'
+                unwrapBottomBtn_Callback(hObject,eventdata,handles);
+            case 'Volkov unwrap'
+                volkovBtn_Callback(hObject, eventdata, handles);
+            case 'Smooth phase'
+                smoothPhaseBtn_Callback(hObject, eventdata, handles);
+        end
+        handles = guidata(hObject);
+    end
+    
     DensityBut_Callback(hObject, eventdata, handles)
     handles = guidata(hObject);
+    
     rhobatch{n} = handles.rho;
+    phibatch{n} = handles.phase;
     InterpretDataBatch.rho = rhobatch;
+    InterpretDataBatch.phi = phibatch;
     assignin('base', 'InterpretDataBatch', InterpretDataBatch)
 end
 
@@ -1069,3 +1114,23 @@ function BatchEndBox_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on button press in volkovBtn.
+function volkovBtn_Callback(hObject, eventdata, handles)
+% hObject    handle to volkovBtn (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+handles.phase = VolkovUnwrap(handles);
+axes(handles.PhaseAxes)
+imagesc(handles.phase); axis image xy;
+guidata(hObject,handles)
+
+
+% --- Executes on button press in batchEditBtn.
+function batchEditBtn_Callback(hObject, eventdata, handles)
+% hObject    handle to batchEditBtn (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+edit('./InterpretSource/EditableBatchCommands.m')
