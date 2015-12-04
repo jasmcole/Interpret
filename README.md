@@ -8,7 +8,7 @@ To set up
 
 1. Add `Interpret.m` to the Matlab root directory, containing the code:
 
-`mroot = fileparts(which('Interpret.m'));''
+`mroot = fileparts(which('Interpret.m'));`
 `addpath([mroot '/Interpret/InterpretSource'])`
 `addpath([mroot '/Interpret'])`
 `cd([mroot '/Interpret'])`
