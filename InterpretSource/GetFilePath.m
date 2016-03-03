@@ -1,4 +1,4 @@
-function filename = ParseExperimentPath(fileexpression, year, month, day, run, shot)
+function filepath = GetFilePath(fileexpression, year, month, day, run, shot)
 
 newfile = fileexpression;
 %Year/Month/Day/Run/Shot/Shot with no zeros/wildcard
@@ -6,7 +6,7 @@ newfile = fileexpression;
 letters = 'YMDRS';
 
 for s = 1:length(letters)
-    for m = 2:10
+    for m = 2:4
         str = repmat(letters(s),1,m);
         inds = strfind(fileexpression, str);
         for n = 1:length(inds)
@@ -29,23 +29,6 @@ for s = 1:length(letters)
     end
 end
 
-for n = 1:length(newfile)
-    if(strcmp(newfile(n), '^'))
-        firsthalf = newfile(1:n-1);
-        secondhalf = newfile(n+1:end);
-        newfile = [firsthalf num2str(shot) secondhalf];
-    end
-end
+filepath = fileparts(newfile);
 
-if(~isempty(strfind(newfile, '*')))
-    realfile = dir(newfile);
-    try
-        realfile = realfile.name;
-    catch
-        realfile = 'No file';
-    end
-    filepath = fileparts(newfile);
-    newfile = [filepath '/' realfile];
 end
-
-filename = newfile;

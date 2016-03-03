@@ -1188,9 +1188,9 @@ if(length(eventdata.Indices) > 0)
         
     end
     
-    if(strcmp(rowname, 'x') || strcmp(rowname, 'y') || strcmp(rowname, 'w') || strcmp(rowname, 'h'))
+    if(strcmp(rowname, 'x'))
         axes(handles.InterferogramAxes)
-        imagesc(imrotate(handles.originaldataimage, handles.calibdata.rotation))
+        imagesc(handles.originaldataimage)
         handles.calibdata
         if(handles.calibdata.x == 0 || ...
            handles.calibdata.y == 0 || ...
@@ -1207,10 +1207,10 @@ if(length(eventdata.Indices) > 0)
         set(handles.StatusBox,'String','Resize ROI and double click inside when done'); drawnow
         position = wait(himrect);
         delete(himrect)
-        handles.calibdata.x = round(position(1));
-        handles.calibdata.y = round(position(2));
-        handles.calibdata.w = round(position(3));
-        handles.calibdata.h = round(position(4));
+        handles.calibdata.x = position(1);
+        handles.calibdata.y = position(2);
+        handles.calibdata.w = position(3);
+        handles.calibdata.h = position(4);
         handles.dataimage = handles.originaldataimage(handles.calibdata.y:handles.calibdata.y+handles.calibdata.h, handles.calibdata.x:handles.calibdata.x+handles.calibdata.w);
         imagesc(handles.dataimage)
         axis image xy
@@ -1218,12 +1218,11 @@ if(length(eventdata.Indices) > 0)
         
         % Update the table (urgh)
         members = fieldnames(handles.calibdata);
-        newcalibdata = cell(length(members),1);
+        params = cell(length(members),1);
         for n = 1:length(members)
-            newcalibdata{n} = handles.calibdata.(members{n});
+            params{n} = calibdata.(members{n});
         end
-        set(handles.CalibrationTable, 'Data', newcalibdata)
+        set(handles.CalibrationTable, 'Data', handles.calibdata)
         guidata(hObject,handles)
-        SavecalibBut_Callback(hObject, eventdata, handles)
     end
 end

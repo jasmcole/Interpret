@@ -6,18 +6,7 @@ INTERferometry Phase RETrieval - perform phase retrieval, unwrapping and density
 To set up
 ---------
 
-1. Add `Interpret.m` to the Matlab root directory, containing the code:
-
-`mroot = fileparts(which('Interpret.m'));`
-
-`addpath([mroot '/Interpret/InterpretSource'])`
-
-`addpath([mroot '/Interpret'])`
-
-`cd([mroot '/Interpret'])`
-
-`IntGui`
-
+1. Move `Interpret_placemeinroot.m` to the Matlab root directory, and rename it to 'Interpret.m'
 2. Create a folder in the Matlab root directory called `Interpret`
 3. Move all of the files to the `Interpret` folder
 4. Run by typing `Interpret` in the command window
@@ -35,7 +24,7 @@ If you have a structured series of files you would like to access using a known 
 - * corresponds to a wildcard
 - ^ corresponds to the shot text box with no zero padding
 
-See `ParseExperimentPath` for more details
+See `ParseExperimentPath.m` for more details
 
 Open any file
 -------------
