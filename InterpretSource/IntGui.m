@@ -294,10 +294,8 @@ if(isfield(calibdata, 'Name'))
     
     axes(handles.ReferenceAxes);
     set(handles.StatusBox,'String','Loading reference'); drawnow
-    
-    if(strcmp(calibdata.reference, 'None'))
-        I = ones(size(handles.originaldataimage));
-    else
+        
+    try
         if (strcmp(calibdata.reference(end-2:end), 'raw'))
             I = ReadRAW16bit(calibdata.reference);
         else
@@ -307,6 +305,10 @@ if(isfield(calibdata, 'Name'))
             end
         end
         I = I - min(min(I));
+        set(handles.StatusBox,'String','Reference loaded'); drawnow
+    catch
+        I = ones(size(handles.originaldataimage));
+        set(handles.StatusBox,'String','Reference not found'); drawnow
     end
     
     I = imrotate(I, calibdata.rotation);
@@ -317,7 +319,8 @@ if(isfield(calibdata, 'Name'))
     
     imagesc(I); axis image xy
     caxis([0 2*mean(mean(I))])
-    set(handles.StatusBox,'String','Reference loaded'); drawnow
+    drawnow
+    
     
 end
 if(~isfield(calibdata, 'Name'))
