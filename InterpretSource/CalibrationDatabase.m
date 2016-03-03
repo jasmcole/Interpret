@@ -1,6 +1,6 @@
 function calibdata = CalibrationDatabase(calibration)
 
-    data = read_mixed_csv('CalibrationDatabase.csv', ',')
+    data = read_mixed_csv('CalibrationDatabase.csv', ',');
     [nparams nrecords] = size(data);
     found = 0;
     i = 0;
