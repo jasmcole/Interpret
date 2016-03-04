@@ -57,6 +57,8 @@ handles.output = hObject;
 % Update handles structure
 guidata(hObject, handles);
 
+date = GetGithubRepoLastCommitTime('Interpret');
+set(handles.StatusBox,'String',['Source last updated ' date]);
 colormap(gray)
 
 
