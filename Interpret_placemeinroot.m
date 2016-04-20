@@ -1,6 +1,5 @@
 mroot = fileparts(which('Interpret.m'));
 
-addpath([mroot '/Interpret/InterpretSource'])
-addpath([mroot '/Interpret'])
-cd([mroot '/Interpret'])
+addpath([mroot filesep 'Interpret' filesep 'InterpretSource'])
+addpath([mroot filesep 'Interpret'])
 IntGui

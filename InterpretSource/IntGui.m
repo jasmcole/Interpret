@@ -54,16 +54,30 @@ function IntGui_OpeningFcn(hObject, eventdata, handles, varargin)
 % Choose default command line output for IntGui
 handles.output = hObject;
 
+mroot = fileparts(which('Interpret.m'));
+introot = [mroot filesep 'Interpret'];
+handles.introot = introot;
+
 % Update handles structure
 guidata(hObject, handles);
 
-date = GetGithubRepoLastCommitTime('Interpret');
-set(handles.StatusBox,'String',['Source last updated ' date]);
+dategithub = GetGithubRepoLastCommitTime('Interpret');
+
+if(exist([introot filesep 'dateinstalled.mat']) == 2)
+   dateinstalled = load([introot filesep 'dateinstalled.mat']);
+   dateinstalled = dateinstalled.dateinstalled;
+else
+   dateinstalled = datestr(now, 'yyyy-mm-dd');
+   save([introot filesep 'dateinstalled.mat'], 'dateinstalled') 
+end
+
+if(datetime(dateinstalled) < datetime(dategithub))
+    msgbox('There is a newer version of Interpret at www.github.com/jasmcole/Interpret')
+end
+
+set(handles.StatusBox,'String',['Source last updated ' dategithub char(10) 'Installation date ' dateinstalled]);
+
 colormap(gray)
-
-
-% UIWAIT makes IntGui wait for user response (see UIRESUME)
-% uiwait(handles.figure1);
 
 
 % --- Outputs from this function are returned to the command line.
@@ -868,7 +882,7 @@ for n = 1:nparams
     data{n,nrecords+1} = data{n,2};
 end
 data{1,nrecords+1} = newcalib{1,1};
-copyfile('CalibrationDatabase.csv', 'CalibrationDatabase_backup.csv')
+copyfile([handles.introot filesep 'CalibrationDatabase.csv'], [handles.introot filesep 'CalibrationDatabase_backup.csv'])
 cell2csv('CalibrationDatabase.csv', data, ',')
 updateCalibPop(handles.CalibPop)
 set(handles.CalibPop, 'Value', nrecords)

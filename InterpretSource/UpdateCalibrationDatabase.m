@@ -1,6 +1,6 @@
 function UpdateCalibrationDatabase(handles)
 
-copyfile('CalibrationDatabase.csv', 'CalibrationDatabase_backup.csv')
+copyfile([handles.introot filesep 'CalibrationDatabase.csv'], [handles.introot filesep 'CalibrationDatabase_backup.csv'])
 
 set(handles.StatusBox,'String','Saving calibration'); drawnow
 
