@@ -22,7 +22,7 @@ function varargout = IntGui(varargin)
 
 % Edit the above text to modify the response to help IntGui
 
-% Last Modified by GUIDE v2.5 11-Jan-2016 12:08:40
+% Last Modified by GUIDE v2.5 20-Apr-2016 18:00:35
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -61,23 +61,38 @@ handles.introot = introot;
 % Update handles structure
 guidata(hObject, handles);
 
-dategithub = GetGithubRepoLastCommitTime('Interpret');
+try
+    dategithub = GetGithubRepoLastCommitTime('Interpret');
 
-if(exist([introot filesep 'dateinstalled.mat']) == 2)
-   dateinstalled = load([introot filesep 'dateinstalled.mat']);
-   dateinstalled = dateinstalled.dateinstalled;
-else
-   dateinstalled = datestr(now, 'yyyy-mm-dd');
-   save([introot filesep 'dateinstalled.mat'], 'dateinstalled') 
+    if(exist([introot filesep 'dateinstalled.mat']) == 2)
+       dateinstalled = load([introot filesep 'dateinstalled.mat']);
+       dateinstalled = dateinstalled.dateinstalled;
+    else
+       dateinstalled = datestr(now, 'yyyy-mm-dd');
+       save([introot filesep 'dateinstalled.mat'], 'dateinstalled') 
+    end
+
+    if(datetime(dateinstalled) < datetime(dategithub))
+        msgbox('There is a newer version of Interpret at www.github.com/jasmcole/Interpret')
+    end
+
+    set(handles.StatusBox,'String',['Source last updated ' dategithub char(10) 'Installation date ' dateinstalled]);
 end
-
-if(datetime(dateinstalled) < datetime(dategithub))
-    msgbox('There is a newer version of Interpret at www.github.com/jasmcole/Interpret')
+    
+try
+    load([handles.introot filesep 'GUIstate.mat'])
+    set(handles.yearBox,'String', guistate.year)
+    set(handles.MonthBox,'String', guistate.month)
+    set(handles.DayBox,'String', guistate.day)
+    set(handles.RunBox,'String', guistate.run)
+    set(handles.ShotBox,'String', guistate.shot)
+    set(handles.WavelengthBox,'String', guistate.wavelength)
+    set(handles.ExpPop, 'Value', guistate.experiment)
+    set(handles.CalibPop, 'Value', guistate.calibration)
+    set(handles.PhasePop, 'Value', guistate.phasemethod)
+    set(handles.DensityPop, 'Value', guistate.densitymethod)
+    set(handles.MediumPop, 'Value', guistate.medium)
 end
-
-set(handles.StatusBox,'String',['Source last updated ' dategithub char(10) 'Installation date ' dateinstalled]);
-
-colormap(gray)
 
 
 % --- Outputs from this function are returned to the command line.
@@ -126,14 +141,10 @@ function CloseMenuItem_Callback(hObject, eventdata, handles)
 % hObject    handle to CloseMenuItem (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-selection = questdlg(['Close ' get(handles.figure1,'Name') '?'],...
-    ['Close ' get(handles.figure1,'Name') '...'],...
-    'Yes','No','Yes');
-if strcmp(selection,'No')
-    return;
+success = saveGUIState(handles);
+if(success)
+    delete(handles.figure1)
 end
-
-delete(handles.figure1)
 
 
 % --- Executes on selection change in ExpPop.
@@ -1246,3 +1257,38 @@ if(length(eventdata.Indices) > 0)
         SavecalibBut_Callback(hObject, eventdata, handles)
     end
 end
+
+
+% --- Executes on button press in costantiniBtn.
+function costantiniBtn_Callback(hObject, eventdata, handles)
+% hObject    handle to costantiniBtn (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+handles.phase = cunwrap(handles);
+axes(handles.PhaseAxes)
+imagesc(handles.phase); axis image xy;
+guidata(hObject,handles)
+
+
+% --- Executes when user attempts to close figure1.
+function figure1_CloseRequestFcn(hObject, eventdata, handles)
+% hObject    handle to figure1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: delete(hObject) closes the figure
+success = saveGUIState(handles);
+if(success)
+    delete(hObject);
+end
+
+
+% --- Executes on button press in removeHotPixelsBtn.
+function removeHotPixelsBtn_Callback(hObject, eventdata, handles)
+% hObject    handle to removeHotPixelsBtn (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+handles.phase = RemoveHotPixelButton(handles);
+axes(handles.PhaseAxes)
+imagesc(handles.phase); axis image xy;
+guidata(hObject,handles)

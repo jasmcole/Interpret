@@ -26,6 +26,12 @@ k = round(k);
 k = k(1:end/2, 1:end/2);
 I = I(1:end/2, 1:end/2);
 
+axes(handles.PhasediagAxes)
+imagesc(k)
+axis image xy
+
+axes(handles.PhaseAxes)
+
 phase = I + 2*pi*k;
 phase = phase - min(phase(:));
 
