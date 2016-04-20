@@ -36,7 +36,7 @@ for row = 1:Nrows
     %     omegas = linspace(omegamin, omegamax, nscales);
     %     scales = Ncols./(omegas*MorletFourierFactor)
     
-    scales = linspace(lambda/2,2*lambda,calibdata.CWT_nlambda);
+    scales = linspace(lambda*handles.calibdata.CWT_fringelo,handles.calibdata.CWT_fringehi*lambda,calibdata.CWT_nlambda);
     omegas = 1./scales;
     
     coeffs = cwt(y,scales,'cmor1-1');
