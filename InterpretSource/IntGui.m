@@ -894,7 +894,7 @@ for n = 1:nparams
 end
 data{1,nrecords+1} = newcalib{1,1};
 copyfile([handles.introot filesep 'CalibrationDatabase.csv'], [handles.introot filesep 'CalibrationDatabase_backup.csv'])
-cell2csv('CalibrationDatabase.csv', data, ',')
+cell2csv([handles.introot filesep 'CalibrationDatabase.csv'], data, ',')
 updateCalibPop(handles.CalibPop)
 set(handles.CalibPop, 'Value', nrecords)
 CalibBut_Callback(gcbo, eventdata, handles)

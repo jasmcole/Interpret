@@ -11,6 +11,6 @@ function commandlist = EditableBatchCommands()
 % Goldstein unwrap
 % Smooth phase
 
-commandlist = {'Goldstein unwrap' 'Rotate right'};
+commandlist = {'Rotate right'};
 
 end

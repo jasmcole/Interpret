@@ -31,7 +31,7 @@ if (found > 0)
     for n = 1:nparams
         data{n,i} = newdata{n,1};
     end
-    cell2csv('CalibrationDatabase.csv', data, ',')
+    cell2csv([handles.introot filesep 'CalibrationDatabase.csv'], data, ',')
 end
 
 set(handles.StatusBox,'String','Calibration saved'); drawnow
