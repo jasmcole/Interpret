@@ -73,7 +73,7 @@ try
     end
 
     if(datetime(dateinstalled) < datetime(dategithub))
-        msgbox('There is a newer version of Interpret at www.github.com/jasmcole/Interpret')
+        %msgbox('There is a newer version of Interpret at www.github.com/jasmcole/Interpret')
     end
 
     set(handles.StatusBox,'String',['Source last updated ' dategithub char(10) 'Installation date ' dateinstalled]);
