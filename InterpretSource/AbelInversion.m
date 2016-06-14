@@ -57,6 +57,7 @@ h = calibdata.micperpix*0.000001;
 asmooth = calibdata.asmooth;
 
 lambda = lambda*1e-9;
+ncrit = 1748e24 * (800e-9/lambda)^2;
 
 %n=1+k(rho/rho_atm)
 %rho_atm=(P/RT)*Na
@@ -71,7 +72,7 @@ switch gas
         k = (1.6e-19)^2*lambda^2*rho_atm/( 8*pi^2 * 9.11e-31 * 8.85e-12 * 9e16);
     case 'Plasma'
         %ncrit for 800nm in m^-3
-        k = rho_atm/(2*1748e24);
+        k = rho_atm/(2*ncrit);
 end
 count = 0;
 for z_index = 1:zsize,
