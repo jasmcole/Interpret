@@ -311,7 +311,15 @@ if(isfield(calibdata, 'Name'))
         calibdata.h = length(I(:,1))-1;
     end
     
-    I = I(calibdata.y:calibdata.y+calibdata.h, calibdata.x:calibdata.x+calibdata.w);
+    try
+        I = I(calibdata.y:calibdata.y+calibdata.h, calibdata.x:calibdata.x+calibdata.w);
+    catch
+        calibdata.x = 1;
+        calibdata.y = 1;
+        calibdata.w = length(I(1,:))-1;
+        calibdata.h = length(I(:,1))-1;
+        uiwait(msgbox('Failed to apply ROI. Reset ROI by clicking one of x, y, w, h.', 'Warning'));
+    end
     imagesc(I)
     axis image xy
     caxis([0 2*mean(mean(I))])
@@ -1241,7 +1249,8 @@ if(length(eventdata.Indices) > 0)
         handles.calibdata.y = round(position(2));
         handles.calibdata.w = round(position(3));
         handles.calibdata.h = round(position(4));
-        handles.dataimage = handles.originaldataimage(handles.calibdata.y:handles.calibdata.y+handles.calibdata.h, handles.calibdata.x:handles.calibdata.x+handles.calibdata.w);
+        rotatedimage = imrotate(handles.originaldataimage, handles.calibdata.rotation);
+        handles.dataimage = rotatedimage(handles.calibdata.y:handles.calibdata.y+handles.calibdata.h, handles.calibdata.x:handles.calibdata.x+handles.calibdata.w);
         imagesc(handles.dataimage)
         axis image xy
         caxis([0 2*mean(mean(handles.dataimage))])
