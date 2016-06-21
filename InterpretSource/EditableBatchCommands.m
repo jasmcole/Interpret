@@ -10,6 +10,7 @@ function commandlist = EditableBatchCommands()
 % Volkov unwrap
 % Goldstein unwrap
 % Smooth phase
+% Subtract gradient
 
 commandlist = {'Rotate right'};
 

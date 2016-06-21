@@ -894,13 +894,50 @@ function newCalibBtn_Callback(hObject, eventdata, handles)
 % hObject    handle to newCalibBtn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-newcalib = inputdlg('Name for new calibration');
 data = read_mixed_csv('CalibrationDatabase.csv', ',');
 [nparams nrecords] = size(data);
-for n = 1:nparams
-    data{n,nrecords+1} = data{n,2};
+exps = cell(nrecords-1,1);
+for n = 2:nrecords
+    exps{n-1} = data{1,n};
 end
-data{1,nrecords+1} = newcalib{1,1};
+
+newcalfig = figure();
+newcalfig.MenuBar = 'none';
+newcalfig.ToolBar = 'none';
+newcalfig.Name = 'Copy calibration';
+newcalfig.NumberTitle = 'off';
+pos = get(newcalfig, 'Position');
+width = 300;
+height = 200;
+set(newcalfig, 'Position', [pos(1) pos(2) width height])
+newcaltxt = uicontrol('Style', 'text', 'parent', newcalfig, 'string', 'Name of new calibration', 'FontSize', 14, 'HorizontalAlignment', 'left');
+newcaltxt.Position = [10 height-30 180 20];
+newcaledt = uicontrol('Style', 'edit', 'parent', newcalfig, 'FontSize', 14, 'HorizontalAlignment', 'left');
+newcaledt.Position = [11 height-55 180 20];
+newcaltxt = uicontrol('Style', 'text', 'parent', newcalfig, 'string', 'Copy from', 'FontSize', 14, 'HorizontalAlignment', 'left');
+newcaltxt.Position = [10 height-90 180 20];
+newcalpop = uicontrol('Style', 'popupmenu', 'parent', newcalfig, 'string', exps, 'FontSize', 14);
+newcalpop.Position = [7 height-100 width-20 1];
+newcalbtn = uicontrol('Style', 'pushbutton', 'parent', newcalfig, 'string', 'OK', 'FontSize', 14, 'Callback', @newCalibOK_Callback, 'UserData', handles);
+newcalbtn.Position = [10 height-160 100 20];
+
+function newCalibOK_Callback(hObject, eventdata)
+
+data = read_mixed_csv('CalibrationDatabase.csv', ',');
+[nparams nrecords] = size(data);
+copyfromcolumn = hObject.Parent.Children(2).Value + 1;
+newname = hObject.Parent.Children(4).String;
+
+disp(['Copying from ' data{1,copyfromcolumn} ' to ' newname])
+
+data{1,nrecords+1} = hObject.Parent.Children(4).String;
+
+for n = 2:nparams
+    data{n,nrecords+1} = data{n,copyfromcolumn};
+end
+
+handles = hObject.UserData;
+
 copyfile([handles.introot filesep 'CalibrationDatabase.csv'], [handles.introot filesep 'CalibrationDatabase_backup.csv'])
 cell2csv([handles.introot filesep 'CalibrationDatabase.csv'], data, ',')
 updateCalibPop(handles.CalibPop)
@@ -1088,6 +1125,8 @@ for n = 1:length(shots)
                 volkovBtn_Callback(hObject, eventdata, handles);
             case 'Smooth phase'
                 smoothPhaseBtn_Callback(hObject, eventdata, handles);
+            case 'Subtract gradient'
+                subtractBtn_Callback(hObject, eventdata, handles)
         end
         handles = guidata(hObject);
     end
