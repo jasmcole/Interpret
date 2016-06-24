@@ -83,10 +83,11 @@ try
                 dateinstalled = datestr(now, 'yyyy-mm-dd');
                 save([introot filesep 'dateinstalled.mat'], 'dateinstalled') 
             end
+        else
+            set(handles.StatusBox,'String',['Source last updated ' dategithub char(10) 'Installation date ' dateinstalled]);
         end
     end
 
-    set(handles.StatusBox,'String',['Source last updated ' dategithub char(10) 'Installation date ' dateinstalled]);
 catch
     set(handles.StatusBox,'String', 'There was an authentication error with the Interpret Github repository.');
 end

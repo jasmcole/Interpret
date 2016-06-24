@@ -1,6 +1,6 @@
 function updateInterpret(savepath)
 
-token = load([srcPrefix 'update.mat']);
+token = load([savepath 'update.mat']);
 optionsText = weboptions('username','jasmcole', 'password', token.token);
 optionsBinary = weboptions('username','jasmcole', 'password', token.token, 'ContentType', 'binary');
 
