@@ -87,6 +87,8 @@ try
     end
 
     set(handles.StatusBox,'String',['Source last updated ' dategithub char(10) 'Installation date ' dateinstalled]);
+catch
+    set(handles.StatusBox,'String', 'There was an authentication error with the Interpret Github repository.');
 end
     
 try
