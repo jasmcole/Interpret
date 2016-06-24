@@ -2,7 +2,7 @@ function updateInterpret(savepath)
 
 token = load([srcPrefix 'update.mat']);
 optionsText = weboptions('username','jasmcole', 'password', token.token);
-optionsBinary = weboptions('username','jasmcole', 'password', '', 'ContentType', 'binary');
+optionsBinary = weboptions('username','jasmcole', 'password', token.token, 'ContentType', 'binary');
 
 % Get list of source files
 srcFiles = webread(['https://api.github.com/repos/jasmcole/Interpret/contents/InterpretSource'], optionsText);
