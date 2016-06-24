@@ -57,12 +57,13 @@ handles.output = hObject;
 mroot = fileparts(which('Interpret.m'));
 introot = [mroot filesep 'Interpret'];
 handles.introot = introot;
+srcPrefix = [handles.introot filesep 'InterpretSource' filesep];
 
 % Update handles structure
 guidata(hObject, handles);
 
 try
-    dategithub = GetGithubRepoLastCommitTime('Interpret');
+    dategithub = GetGithubRepoLastCommitTime('Interpret', srcPrefix);
 
     if(exist([introot filesep 'dateinstalled.mat']) == 2)
        dateinstalled = load([introot filesep 'dateinstalled.mat']);
@@ -75,7 +76,6 @@ try
     if(datetime(dateinstalled) < datetime(dategithub))
         button = questdlg('There is a newer version of Interpret. Download now?');
         if(strcmp(button, 'Yes'))
-            srcPrefix = [handles.introot filesep 'InterpretSource/'];
             button = questdlg(['Installing files to ' srcPrefix '. Is this correct?']);
             if(strcmp(button, 'Yes'))
                 updateInterpret(srcPrefix);

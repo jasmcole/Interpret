@@ -1,6 +1,7 @@
-function date = GetGithubRepoLastCommitTime(repo)
+function date = GetGithubRepoLastCommitTime(repo, srcPrefix)
 
-optionsText = weboptions('username','jasmcole', 'password', '');
+token = load([srcPrefix 'update.mat']);
+optionsText = weboptions('username','jasmcole', 'password', token.token);
 resp = webread(['https://api.github.com/repos/jasmcole/' repo '/git/refs/heads/master'], optionsText);
 commit = webread(resp.object.url);
 datetime = commit.author.date;

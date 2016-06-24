@@ -1,6 +1,7 @@
 function updateInterpret(savepath)
 
-optionsText = weboptions('username','jasmcole', 'password', '');
+token = load([srcPrefix 'update.mat']);
+optionsText = weboptions('username','jasmcole', 'password', token.token);
 optionsBinary = weboptions('username','jasmcole', 'password', '', 'ContentType', 'binary');
 
 % Get list of source files
