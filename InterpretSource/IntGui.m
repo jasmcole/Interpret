@@ -73,7 +73,17 @@ try
     end
 
     if(datetime(dateinstalled) < datetime(dategithub))
-        %msgbox('There is a newer version of Interpret at www.github.com/jasmcole/Interpret')
+        button = questdlg('There is a newer version of Interpret. Download now?');
+        if(strcmp(button, 'Yes'))
+            srcPrefix = [handles.introot filesep 'InterpretSource/'];
+            button = questdlg(['Installing files to ' srcPrefix '. Is this correct?']);
+            if(strcmp(button, 'Yes'))
+                updateInterpret(srcPrefix);
+                msgbox('Please restart Interpret');
+                dateinstalled = datestr(now, 'yyyy-mm-dd');
+                save([introot filesep 'dateinstalled.mat'], 'dateinstalled') 
+            end
+        end
     end
 
     set(handles.StatusBox,'String',['Source last updated ' dategithub char(10) 'Installation date ' dateinstalled]);
