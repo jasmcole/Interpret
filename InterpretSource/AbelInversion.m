@@ -2,16 +2,10 @@
 %micperpix is in microns, gas is a string, lambda is in nm
 
 function [rho, yaxis, zaxis, rhomean] = AbelInversion(Phi, calibdata, gas, lambda, plotflag, handles)
+
 set(handles.StatusBox, 'String', 'Beginning Abel inversion'); drawnow
-%Phi = fliplr(Phi);
 
 Phi(isnan(Phi)) = 0;
-
-[ysize xsize] = size(Phi);
-xsize = 1:xsize;
-ysize = 1:ysize;
-x = {ysize,xsize};
-[Phi,p] = csaps(x,Phi,1,x);
 
 if (calibdata.ymid == 0)
     
@@ -53,7 +47,7 @@ end
 
 ysize = length(Phi(1,:))-1;
 zsize = length(Phi(:,1));
-h = calibdata.micperpix*0.000001;
+h = calibdata.micperpix * 1e-6;
 asmooth = calibdata.asmooth;
 
 lambda = lambda*1e-9;
@@ -65,29 +59,34 @@ rho_atm=(101.325e3*6.022e23)/(8.31*273); %units m^-3
 
 switch gas
     case 'Argon'
-        k=0.000281;
+        k = 0.000281;
     case 'Nitrogen'
-        k=0.000265;
+        k = 0.000265;
     case 'Plasmaold'
-        k = (1.6e-19)^2*lambda^2*rho_atm/( 8*pi^2 * 9.11e-31 * 8.85e-12 * 9e16);
+        k = (1.6e-19)^2*lambda^2*rho_atm/(8*pi^2 * 9.11e-31 * 8.85e-12 * 9e16);
     case 'Plasma'
         %ncrit for 800nm in m^-3
         k = rho_atm/(2*ncrit);
 end
-count = 0;
+
+Ny = ysize - ymid + 1;
+Philine = zeros(1, Ny);
+Philinemirror = zeros(1, 2*Ny); 
+yaxis = 1:Ny;
+yaxis2 = 1:2*Ny;
+rho = zeros(zsize, ysize-ymid);
+
+t = 0;
+
 for z_index = 1:zsize,
     
-    Philine = Phi(z_index,:);
-    Philine = Philine(ymid:ysize);
+    Philine = Phi(z_index, ymid:ysize);
     Philineold = Philine;
-    Philine = [fliplr(Philine) Philine];
-    yaxis = 1:length(Philine);
-    Philine = csaps(yaxis, Philine, asmooth, yaxis);
-    Philine = Philine(end/2 + 1:end);
-    yaxis = 1:length(Philine);
-    
-    if (count > zsize/10)
-        count = 0;
+    Philinemirror = [fliplr(Philine) Philine];
+    Philinemirror = csaps(yaxis2, Philinemirror, asmooth, yaxis2);
+    Philine = Philinemirror(end/2 + 1:end);
+
+    if (~mod(z_index, round(zsize/10)))
         % This plots the smoothed and unsmoothed phase for comparison
         axes(handles.DensitydiagAxes)
         plot(Philineold, '.')
@@ -98,26 +97,17 @@ for z_index = 1:zsize,
         set(handles.StatusBox, 'String', ['Doing Abel inversion...' percentdone]); drawnow
     end
     
-    dPhidy = -gradient(Philine,1);
-    dPhidy = dPhidy/h;
+    dPhidy = -gradient(Philine,1)/h;
     dPhidy(1) = 0.1*dPhidy(2);
-    
-    for r_index = 1:ysize-ymid,
-        for y_index = r_index:ysize - ymid + 1
-            y = (double(y_index) - 0.9)*h;
-            r = (double(r_index) - 1.0)*h;
-            integrand(y_index - r_index + 1) = dPhidy(y_index)*(y^2 - r^2)^-0.5;
-            
-        end
         
-        %rho(z_index, r_index) = -1.4863e21*h*trapz(integrand);
-        rho(z_index, r_index) = ((lambda*rho_atm)/(2*pi^2*k))*h*trapz(integrand);
-        integrand(end) = [];
-    end
-    
-    count = count + 1;
-    
+    [yg rg] = meshgrid(([1:Ny] - 0.9)*h, (0:Ny-2)*h);
+    dPhig = repmat(dPhidy, [Ny-1, 1]);
+    integrand = dPhig./sqrt(yg.^2 - rg.^2);
+    integrand = integrand.*(rg < yg);
+    rho(z_index, :) = sum(integrand');
 end
+
+rho = rho * ((lambda*rho_atm)/(2*pi^2*k))*h;
 
 rho = [fliplr(rho) rho];
 rho = imrotate(rho, -90);
@@ -139,6 +129,7 @@ if (plotflag == 1)
     plot(yaxis, rhomean)
     xlabel('z /mm')
     ylabel('Density /m^{-3}')
+    title('Mean density within central 20 pixels')
 end
 
 set(handles.StatusBox, 'String', 'Finished Abel inversion'); drawnow

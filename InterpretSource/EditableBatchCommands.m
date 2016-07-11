@@ -12,6 +12,6 @@ function commandlist = EditableBatchCommands()
 % Smooth phase
 % Subtract gradient
 
-commandlist = {'Rotate right'};
+commandlist = {'Unwrap top', 'Rotate right'};
 
 end
