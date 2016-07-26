@@ -640,40 +640,43 @@ function OpenBtn_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-[filename,pathname] = uigetfile;
-filename = [pathname filename];
+[filename,pathname] = uigetfile('*.*', 'Open image file');
 
-handles.datafile = filename;
-guidata(hObject,handles)
-[filenamewrap,newpos] = textwrap(handles.FileTxt,{filename}, 50);
-set(handles.FileTxt,'String',filenamewrap, 'Position', newpos)
-if (exist(filename, 'file') == 2)
-    set(handles.FileCheck, 'Value',1,'String','Found file', 'ForegroundColor', 'green')
-    set(handles.CalibCheck, 'Value',0,'String','Reload calibration?', 'ForegroundColor', 'blue')
-end
-if (exist(filename, 'file') ~= 2)
-    set(handles.FileCheck,'Value',0,'String','No file', 'ForegroundColor', 'red')
-end
+if(filename ~= 0)
+    filename = [pathname filename];
 
-axes(handles.InterferogramAxes);
-set(handles.StatusBox,'String','Reading data file'); drawnow
-
-if(strcmp(filename(end-2:end), 'raw'))
-    I = ReadRAW16bit(filename);
-else
-    I = imread(filename);
-    if(length(size(I)) > 2)
-        I = rgb2gray(I);
+    handles.datafile = filename;
+    guidata(hObject,handles)
+    [filenamewrap,newpos] = textwrap(handles.FileTxt,{filename}, 50);
+    set(handles.FileTxt,'String',filenamewrap, 'Position', newpos)
+    if (exist(filename, 'file') == 2)
+        set(handles.FileCheck, 'Value',1,'String','Found file', 'ForegroundColor', 'green')
+        set(handles.CalibCheck, 'Value',0,'String','Reload calibration?', 'ForegroundColor', 'blue')
     end
+    if (exist(filename, 'file') ~= 2)
+        set(handles.FileCheck,'Value',0,'String','No file', 'ForegroundColor', 'red')
+    end
+
+    axes(handles.InterferogramAxes);
+    set(handles.StatusBox,'String','Reading data file'); drawnow
+
+    if(strcmp(filename(end-2:end), 'raw'))
+        I = ReadRAW16bit(filename);
+    else
+        I = imread(filename);
+        if(length(size(I)) > 2)
+            I = rgb2gray(I);
+        end
+    end
+    I = I - min(I(:));
+    imagesc(I)
+    colormap jet
+    caxis([0 2*mean(mean(I))])
+    handles.dataimage = I;
+    handles.originaldataimage = I;
+    guidata(hObject,handles)
+    set(handles.StatusBox,'String','Data file loaded'); drawnow
 end
-I = I - min(I(:));
-imagesc(I)
-colormap jet
-caxis([0 2*mean(mean(I))])
-handles.dataimage = I;
-handles.originaldataimage = I;
-guidata(hObject,handles)
-set(handles.StatusBox,'String','Data file loaded'); drawnow
 
 
 % --- Executes on button press in SavecalibBut.
@@ -1268,11 +1271,21 @@ if(length(eventdata.Indices) > 0)
         end
         
         filepath = GetFilePath(fileexpression, year, month, day, run, shot);
-        [filename, pathname, filterindex] = uigetfile(filepath, '*.*');
         
-        handles.CalibrationTable.Data{eventdata.Indices(1),1} = fullfile(pathname, filename);
-        guidata(hObject,handles)
-        SavecalibBut_Callback(hObject, eventdata, handles)
+        [filename, pathname, filterindex] = uigetfile([filepath filesep '*.*'], 'Click cancel to clear reference');
+        
+        if(filename == 0)
+            button = questdlg('Clear the reference?');
+            if(strcmp(button, 'Yes'))
+                handles.CalibrationTable.Data{eventdata.Indices(1),1} = 'None';
+                guidata(hObject,handles)
+                SavecalibBut_Callback(hObject, eventdata, handles)
+            end
+        else
+            handles.CalibrationTable.Data{eventdata.Indices(1),1} = fullfile(pathname, filename);
+            guidata(hObject,handles)
+            SavecalibBut_Callback(hObject, eventdata, handles)
+        end
     end
     
     if(strcmp(rowname, 'x') || strcmp(rowname, 'y') || strcmp(rowname, 'w') || strcmp(rowname, 'h'))
