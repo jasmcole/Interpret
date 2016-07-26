@@ -107,6 +107,8 @@ try
     set(handles.PhasePop, 'Value', guistate.phasemethod)
     set(handles.DensityPop, 'Value', guistate.densitymethod)
     set(handles.MediumPop, 'Value', guistate.medium)
+catch
+    set(handles.StatusBox,'String', 'There was an error loading the GUI state. If this error persists try deleting GUIstate.m .');
 end
 
 
@@ -1270,7 +1272,7 @@ if(length(eventdata.Indices) > 0)
         
         handles.CalibrationTable.Data{eventdata.Indices(1),1} = fullfile(pathname, filename);
         guidata(hObject,handles)
-        
+        SavecalibBut_Callback(hObject, eventdata, handles)
     end
     
     if(strcmp(rowname, 'x') || strcmp(rowname, 'y') || strcmp(rowname, 'w') || strcmp(rowname, 'h'))
