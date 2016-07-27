@@ -1,16 +1,18 @@
 Interpret
 =========
 
-INTERferometry Phase RETrieval - perform phase retrieval, unwrapping and density retrieval of experimental interferograms. Requires Matlab 2012b or later.
+**INTER**ferometry **P**hase **RET** rieval - perform phase retrieval, unwrapping and density retrieval of experimental interferograms. Requires Matlab 2012b or later. Tested on OSX.
+
+![ScreenShot](/Images/MainWindow.png)
 
 ![ScreenShot](http://imgur.com/a/qufgP)
 
 To set up
 ---------
 
-1. Move `Interpret_placemeinroot.m` to the Matlab root directory, and rename it to 'Interpret.m'
-2. Create a folder in the Matlab root directory called `Interpret`
-3. Move all of the files to the `Interpret` folder
+1. Download the zipped Interpret repository and extract
+2. Move `Interpret_placemeinroot.m` to the Matlab root directory, and rename it to 'Interpret.m'
+3. Rename the Interpret-master folder to Interpret, and place it in the Matlab root directory.
 4. Run by typing `Interpret` in the command window
 
 Set up a file naming convention
@@ -28,78 +30,131 @@ If you have a structured series of files you would like to access using a known 
 
 See `ParseExperimentPath.m` for more details
 
-Open any file
--------------
+Open an interferogram
+---------------------
 
-Click the `Other` button and select a file
+If loading a file from a structured data directory, enter the correct numbers in the text boxes and click `Load File`.
+
+If loading any other file, click `Other`.
+
+Interpret uses the Matlab `imread` command for most images. For `.raw` images it will try a standard set of image sizes. For more details see `ReadRAW16bit.m`.
 
 Load a calibration
 ------------------
 
-The drop-down list is populated from the `CalibrationDatabase.csv` file, and loads the variables defined by their name and contents. These variables are displayed in the table, and by editing the `.csv` file Interpret will have access to different variables at runtime.
+The drop-down calibration list is populated from the `CalibrationDatabase.csv` file, and loads the variables defined by their name and contents. These variables are displayed in the table, and by editing the `.csv` file Interpret will have access to different variables at runtime.
 
 Select a calibration and click `Apply`. Any changes made are applied and saved automatically, unless the `Auto-apply updates` checkbox is unticked.
 
 Create a new calibration
 ------------------------
 
-Click the `New` button and type a name for the calibration. This calibration is selected and populated with default values, then saved automatically.
+Click the `New` button and type a name for the calibration. You can copy values from another calibration, or use default values.
 
-Set the reference field to `None` if no reference exists.
+Default calibration entries are
+- `Name` - the name of the calibration
+- `micperpix` - the number of microns per pixel in the interferograms
+- `rotation` - the rotation applied to the image
+- `x`/`y`/`w`/`h` - the ROI of the image. Clicking any of these entries will bring up an interactive rectangle over the uncropped image. Resize as necessary, then double-click inside the rectangle to set the ROI
+- `xfft`/`yfft`/`wfft`/`hfft` - the ROI applied in the Fourier plane. See details below
+- `reference` - the path to the reference interferogram. Selecting this entry will open a file selector dialog.
+- `hsmooth1`/`hsmooth2` - smoothing parameters for the Hilbert transform
+- `asmooth` - smoothing parameter for the inverse Abel transform
+- `ymid` - the pixel coordinate of the symmetry axis of the interferogram
+- `nfringes` - the number of fringes in the image, used in the wavelet transforms
+- `CWT_fringelo`/`CWT_fringehi` - the range over which to fit fringe in the CWT methods. Set to 0.5/2 means scan over the range of 50% to 200% of the mean fringe wavelength.
+- `CWT_ntheta` - the number of fringe angles to try in the CWT2D methods
+- `CWT_nlambda` - the number of fringe wavelengths to try in the CWT methods
+- `Moire_p_um` - the grating pitch if doing Moire deflectometry
+- `Moire_d_mm` - the grating separation if doing Moire deflectometry
 
 
 Retrieve a phase profile
 ------------------------
 
-FFT:
+There are several methods to retrieve the phase shift.
 
-- Click and drag to choose a Fourier region to analyse.
-- Save a Fourier region by populating the xfft, yfft, wfft and hfft fields in the calibration table
+#### FFT
+- Fast, noise tolerant, can suffer from ringing.
+- Works in the Fourier plane - a 2D FFT of the interferogram is displayed in the phase diagnostic axes.
+- Click and drag a rectangle to choose a Fourier region to analyse. Typically one of the lobes either side of the origin.
+- (optional) Save a Fourier region by populating the xfft, yfft, wfft and hfft fields in the calibration table.
+
+#### Hilbert
+- Fast, noise tolerant, sometimes doesn't completely remove fringes.
+- Works row-by-row through the image, so the fringes need to be mostly **vertical**. If they are not, use the `rotation` attribute to rotate the image by 90 degrees.
+- Needs to work on a sinusoidal signal oscillating about 0, therefore the mean of the image must be subtracted. The mean is a heavily smoothed copy of the image using smoothing parameter `hsmooth1`. This should be close to zero.
+- After subtraction the data can be smoothed using `hsmooth2`. A value of 1 indicates no smoothing, values closer to 0 indicate more smoothing.
+- The filtered interferogram is displayed in the phase diagnostic axes. If the fringes are broken, try changing `hsmooth1`.
+
+#### CWT
+- Slow, can be susceptible to noise, gives most accurate results.
+- Again works row-by-row so the fringes should be close to vertical.
+- Need to set the `CWT_nfringes` parameter to the number of fringes visible in the image.
+- The phase diagnostic axes show the best CWT fit to the local fringe wavelength (blue dots). If the blue dots are all at the lower or upper limits of the plot, change `CWT_nfringes` and 'CWT_fringelo'/`CWT_fringehi` accordingly.
+- If there is wide variation in fringe wavelength try increasing `CWT_nlambda`. Otherwise keep this at 2 to decrease errors in the fit.
+
+#### CWT2D
+- Fast, susceptible to noise, necessary when fringes are at a large angle.
+- Works in any orientation.
+- Try increasing `CWT_nlambda` and `CWT_ntheta` if the fit is poor.
 
 Unwrap a phase profile
 ----------------------
+After retrieval the phase will be wrapped within ± π. For large phase shifts it will need to be unwrapped. There are various techniques available, in practice some will work better than others on different images.
 
-1D unwrap:
+#### 1D unwrap
+- Fast, works line-by-line
+- Click the `Top`/`Bottom`/`Left`/`Right` buttons to perform simple unwraps from the edge of the image.
 
-- Click the `Top`/`Bottom`/`Left`/`Right` buttons to perform simple unwraps from the edge of the image
+#### Volkov unwrap
+- Fast, based on 2D FFT.
+- Click the `Volkov unwrap` button. Sometimes trying multiple unwraps in a row can improve the unwrapping.
 
-Volkov unwrap
-
-- Click the `Volkov unwrap` button to perform a fast 2D unwrap. Sometimes trying multiple unwraps in a row can improve the unwrapping
-
-Goldstein unwrap
-
+#### Goldstein unwrap
+- Slow, robust.
 - Click the `Goldstein unwrap` button to perform a slow Goldsten unwrap
-- Click a pixel in the image where it is known that no phase ambiguities occur
-- Wait...
+- Click a pixel in the image where it is known that the phase isn't wrapped.
 
-Phase analysis buttons
-----------------------
+#### Costantini unwrap
+- Slowish
+- Uses a network flow method.
+
+Phase processing
+----------------
+
+There are several functions available for modifying the retrieved phase map.
 
 `Subtract gradient`
 
-- Subtract a smooth gradient from the phase profile. Useful if no reference exists, but not very accurate
-
-`Invert phase`
-
-- Negates the phase profile
-
-`Region of interest`
-
-- Click and drag to crop the phase image. Useful if phase errors only occur at the edges
+Subtract a smooth gradient from the phase profile. Useful if no reference exists, but not very accurate.
 
 `Smooth phase`
 
-- Smooth the phase profile with a 2D cubic spline smoothing filter
+Smooth the phase profile with a 2D cubic spline smoothing filter.
+
+`Invert phase`
+
+Negates the phase.
+
+`Remove hot pixels`
+
+Sometimes, especially after a Volkov unwrap, there will be small residual phase errors. Use this function to remove such errors.
+
+`Region of interest`
+
+Click and drag to crop the phase image. Useful if phase errors only occur at the edges
 
 `Adjust contrast`
 
-- Bring up the `imcontrast` tool for the phase plot
+Bring up the `imcontrast` tool for the phase plot
 
 Density retrieval
 -----------------
 
 Choose a laser wavelength and a refractive medium, and a density retrieval method. The micperpix calibration variable needs to be set for accurate density retrieval.
+
+It is currently assumed that the symmetry axis is **vertical**. Therefore the phase map must be rotated if not, using the `Left`/`Right` buttons. If the symmetry axis is not perfectly vertical, the `rotation` property should be adjusted.
 
 Abel inversion
 

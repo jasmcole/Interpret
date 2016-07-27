@@ -956,6 +956,7 @@ cell2csv([handles.introot filesep 'CalibrationDatabase.csv'], data, ',')
 updateCalibPop(handles.CalibPop)
 set(handles.CalibPop, 'Value', nrecords)
 CalibBut_Callback(gcbo, eventdata, handles)
+close(hObject.Parent)
 
 
 % --- Executes on button press in imcontrastBtn.
