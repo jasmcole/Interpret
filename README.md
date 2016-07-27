@@ -5,8 +5,6 @@ Interpret
 
 ![ScreenShot](/Images/MainWindow.png)
 
-![ScreenShot](http://imgur.com/a/qufgP)
-
 To set up
 ---------
 
@@ -38,6 +36,10 @@ If loading a file from a structured data directory, enter the correct numbers in
 If loading any other file, click `Other`.
 
 Interpret uses the Matlab `imread` command for most images. For `.raw` images it will try a standard set of image sizes. For more details see `ReadRAW16bit.m`.
+
+`Adjust contrast`
+
+Opens an imcontrast widget to adjust the colourmap of the interferogram axes.
 
 Load a calibration
 ------------------
@@ -154,9 +156,42 @@ Density retrieval
 
 Choose a laser wavelength and a refractive medium, and a density retrieval method. The micperpix calibration variable needs to be set for accurate density retrieval.
 
-It is currently assumed that the symmetry axis is **vertical**. Therefore the phase map must be rotated if not, using the `Left`/`Right` buttons. If the symmetry axis is not perfectly vertical, the `rotation` property should be adjusted.
+It is currently assumed that the symmetry axis is **vertical**. Therefore the phase map must be rotated if not, using the `Left`/`Right` buttons. If the symmetry axis is not perfectly vertical, the `rotation` property should be adjusted. Currently this requires a full phase retrieval again - should be updated in future.
 
-Abel inversion
+If the `ymid` property is set to 0 the user is prompted to select a symmetry axis, otherwise the axis is set to the pixel coordinate in `ymid`.
 
-- Upon clicking, the user is prompted to manually select a symmetry axis. This can also be set using the `ymid` calibration field.
+#### Abel inversion
+
 - The Abel inversion is performed line-by-line, smoothed according to the `asmooth` calibration field. `asmooth = 1` corresponds to no smoothing, and `asmooth = 0` to maximum smoothing. This variable should be used in a logarithmic sense, i.e. one should try values of 0.1, 0.01, 0.001 etc.
+
+#### Trapezoidal fit
+
+- Attempts to fit a trapezoidal density profile to the phase map. Currently untested, should be avoided.
+
+Density analysis
+----------------
+
+Once a density map has been calculated it is displayed in the density axes, with a lineout down the symmetry axis plotted in the density diagnostic axes.
+
+`Density lineout`
+
+Select a point in the density image to plot orthogonal lineouts through that point.
+
+`Get average`
+
+Click, from left-to-right, to points in the lineout to define a range over which to analyse. The mean density and standard deviation are indicated on the plot and in the status box.
+
+`Save to workspace/file`
+
+Save the phase and density profiles to the Matab workspace in the form of a struct called `InterpretData`, or to a `.mat` file.
+
+Batch process
+-------------
+
+If reading data from structured directories, it is possible to batch process a number of shots. The two text boxes mark the region of shots to process (e.g., from shot 2 to 15).
+
+By default, for every image loaded, the currently applied calibration is used, the currently selected phase retrieval method is used, and the currently selected density retrieval method is used.
+
+If additional commands are required, e.g. unwrapping, click the `Edit Batch Commands` button. This opens the file `EditableBatchCommands.m` which returns a cell array of strings. Each string corresponds to a button click, and clicks are executed in order.
+
+After completion, a struct `InterpretDataBatch` is saved to the Matlab workspace.
