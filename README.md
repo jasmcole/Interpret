@@ -3,6 +3,8 @@ Interpret
 
 INTERferometry Phase RETrieval - perform phase retrieval, unwrapping and density retrieval of experimental interferograms. Requires Matlab 2012b or later.
 
+![ScreenShot](http://imgur.com/a/qufgP)
+
 To set up
 ---------
 
