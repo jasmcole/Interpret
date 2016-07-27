@@ -3,10 +3,22 @@ Interpret
 
 **INTER**ferometry **P**hase **RET** rieval - perform phase retrieval, unwrapping and density retrieval of experimental interferograms. Requires Matlab 2012b or later. Tested on OSX.
 
-![ScreenShot](/Images/MainWindow.png)
+![MainWindow](/Images/MainWindow.png)
 
-To set up
----------
+## Contents
+1. [Installation](#Installation)
+2. [Set up a file naming convention](#set-up-a-file-naming-convention)
+3. [Open an interferogram](#open-an-interferogram)
+4. [Apply a calibration](#apply-a-calibration)
+5. [Retrieve a phase profile](#retrieve-a-phase-profile)
+6. [Unwrap a phase profile](#unwrap-a-phase-profile)
+7. [Phase processing](#phase-processing)
+8. [Density retrieval](#density-retrieval)
+9. [Density analysis](#density-analysis)
+10. [Batch process](#batch-process)
+
+Installation
+------------
 
 1. Download the zipped Interpret repository and extract
 2. Move `Interpret_placemeinroot.m` to the Matlab root directory, and rename it to 'Interpret.m'
@@ -31,6 +43,8 @@ See `ParseExperimentPath.m` for more details
 Open an interferogram
 ---------------------
 
+<img src="/Images/OpenFile.png" alt="LoadFile" style="width: 200px;"/>
+
 If loading a file from a structured data directory, enter the correct numbers in the text boxes and click `Load File`.
 
 If loading any other file, click `Other`.
@@ -41,15 +55,18 @@ Interpret uses the Matlab `imread` command for most images. For `.raw` images it
 
 Opens an imcontrast widget to adjust the colourmap of the interferogram axes.
 
-Load a calibration
-------------------
+Apply a calibration
+-------------------
+
+<img src="/Images/Calibration.png" alt="Calibration" style="width: 200px;"/>
 
 The drop-down calibration list is populated from the `CalibrationDatabase.csv` file, and loads the variables defined by their name and contents. These variables are displayed in the table, and by editing the `.csv` file Interpret will have access to different variables at runtime.
 
 Select a calibration and click `Apply`. Any changes made are applied and saved automatically, unless the `Auto-apply updates` checkbox is unticked.
 
-Create a new calibration
-------------------------
+#### Create a new calibration
+
+<img src="/Images/NewCalibration.png" alt="Calibration" style="width: 200px;"/>
 
 Click the `New` button and type a name for the calibration. You can copy values from another calibration, or use default values.
 
@@ -77,9 +94,13 @@ Retrieve a phase profile
 There are several methods to retrieve the phase shift.
 
 #### FFT
+
 - Fast, noise tolerant, can suffer from ringing.
 - Works in the Fourier plane - a 2D FFT of the interferogram is displayed in the phase diagnostic axes.
 - Click and drag a rectangle to choose a Fourier region to analyse. Typically one of the lobes either side of the origin.
+
+<img src="/Images/FFT.png" alt="Calibration" style="width: 400px;"/>
+
 - (optional) Save a Fourier region by populating the xfft, yfft, wfft and hfft fields in the calibration table.
 
 #### Hilbert
@@ -180,6 +201,8 @@ Select a point in the density image to plot orthogonal lineouts through that poi
 `Get average`
 
 Click, from left-to-right, to points in the lineout to define a range over which to analyse. The mean density and standard deviation are indicated on the plot and in the status box.
+
+<img src="/Images/MeanDensity.png" alt="MeanDensity" style="width: 400px;"/>
 
 `Save to workspace/file`
 
