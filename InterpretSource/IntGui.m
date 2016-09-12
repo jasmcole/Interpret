@@ -330,12 +330,12 @@ if(isfield(calibdata, 'Name'))
         calibdata.h = length(I(:,1))-1;
         uiwait(msgbox('Failed to apply ROI. Reset ROI by clicking one of x, y, w, h.', 'Warning'));
     end
+
     imagesc(I)
     axis image xy
     caxis([0 2*mean(mean(I))])
     handles.dataimage = I;
     guidata(hObject,handles)
-    
     
     axes(handles.ReferenceAxes);
     set(handles.StatusBox,'String','Loading reference'); drawnow
@@ -422,7 +422,6 @@ else
 end
 I(isnan(I)) = 0;
 I = I - min(min(I));
-imagesc(I); axis image xy
 
 handles.dataimage = I;
 handles.originaldataimage = I;
@@ -433,6 +432,8 @@ caxis([0 2*mean(mean(I))])
 set(handles.StatusBox,'String','Data file loaded'); drawnow
 if(isfield(handles, 'calibdata'))
     CalibBut_Callback(gcbo, eventdata, handles)
+else
+    imagesc(I); axis image xy
 end
 
 % --- Executes on button press in FileCheck.
