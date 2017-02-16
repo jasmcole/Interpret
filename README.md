@@ -21,8 +21,8 @@ Installation
 ------------
 
 1. Download the zipped Interpret repository and extract
-2. Move `Interpret_placemeinroot.m` to the Matlab root directory, and rename it to 'Interpret.m'
-3. Rename the Interpret-master folder to Interpret, and place it in the Matlab root directory.
+2. Move `Interpret_placemeinroot.m` to your Matlab home directory, and rename it to 'Interpret.m'
+3. Rename the `Interpret-master` folder to `Interpret`, and place it in your Matlab home directory.
 4. Run by typing `Interpret` in the command window
 
 Set up a file naming convention
