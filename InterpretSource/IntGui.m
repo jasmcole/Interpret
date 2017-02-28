@@ -22,7 +22,7 @@ function varargout = IntGui(varargin)
 
 % Edit the above text to modify the response to help IntGui
 
-% Last Modified by GUIDE v2.5 20-Apr-2016 18:00:35
+% Last Modified by GUIDE v2.5 28-Feb-2017 20:26:22
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -1365,3 +1365,52 @@ handles.phase = RemoveHotPixelButton(handles);
 axes(handles.PhaseAxes)
 imagesc(handles.phase); axis image xy;
 guidata(hObject,handles)
+
+
+% --------------------------------------------------------------------
+function EditMenu_Callback(hObject, eventdata, handles)
+% hObject    handle to EditMenu (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% This is horrible. TODO: fix
+function ReduceFontSize_Callback(hObject, eventdata, handles)
+
+fig = gcf;
+
+for i = 1:length(fig.Children)
+    
+    if length(fig.Children(i).Children) > 0
+        for j = 1:length(fig.Children(i).Children)
+            try
+                fig.Children(i).Children(j).FontSize = fig.Children(i).Children(j).FontSize/1.5;
+            end
+        end
+    end
+    
+    try
+        fig.Children(i).FontSize = fig.Children(i).FontSize/1.5;
+    end
+end
+
+
+% This is horrible. TODO: fix
+function IncreaseFontSize_Callback(hObject, eventdata, handles)
+
+fig = gcf;
+
+for i = 1:length(fig.Children)
+    
+    if length(fig.Children(i).Children) > 0
+        for j = 1:length(fig.Children(i).Children)
+            try
+                fig.Children(i).Children(j).FontSize = fig.Children(i).Children(j).FontSize*1.5;
+            end
+        end
+    end
+    
+    try
+        fig.Children(i).FontSize = fig.Children(i).FontSize*1.5;
+    end
+end
