@@ -22,7 +22,7 @@ function varargout = IntGui(varargin)
 
 % Edit the above text to modify the response to help IntGui
 
-% Last Modified by GUIDE v2.5 28-Feb-2017 20:26:22
+% Last Modified by GUIDE v2.5 01-Mar-2017 09:23:33
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -74,7 +74,7 @@ try
     end
 
     if(datetime(dateinstalled) < datetime(dategithub))
-        button = questdlg('There is a newer version of Interpret. Download now?');
+        button = questdlg('There is a newer version of Interpret. Download now?', 'Interpret Update', 'Yes', 'Not now', 'Skip this version', 'Yes');
         if(strcmp(button, 'Yes'))
             button = questdlg(['Installing files to ' srcPrefix '. Is this correct?']);
             if(strcmp(button, 'Yes'))
@@ -83,6 +83,9 @@ try
                 save([introot filesep 'dateinstalled.mat'], 'dateinstalled')
                 set(handles.StatusBox,'String', 'Update successful. Please restart Interpret.');
             end
+        elseif(strcmp(button, 'Skip this version'))
+            dateinstalled = datestr(now, 'yyyy-mm-dd');
+            save([introot filesep 'dateinstalled.mat'], 'dateinstalled') 
         else
             set(handles.StatusBox,'String',['Source last updated ' dategithub char(10) 'Installation date ' dateinstalled]);
         end
@@ -1414,3 +1417,12 @@ for i = 1:length(fig.Children)
         fig.Children(i).FontSize = fig.Children(i).FontSize*1.5;
     end
 end
+
+function HelpMenu_Callback(hObject, eventdata, handles)
+% hObject    handle to EditMenu (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+function OnlineHelp_Callback(hObject, eventdata, handles)
+web('https://github.com/jasmcole/Interpret')
