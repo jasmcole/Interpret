@@ -1,4 +1,4 @@
-function phase = CWT2DPhaseRetrieve(handles)
+function [phase, mask] = CWT2DPhaseRetrieve(handles)
 
 % From Jason 20/01/2014
 % Make sure fringes are vertical in image and you've put the right number
@@ -7,22 +7,20 @@ function phase = CWT2DPhaseRetrieve(handles)
 datafile = double(handles.dataimage);
 intref = double(handles.refimage);
 calibdata = handles.calibdata;
+maskthresh = calibdata.CWT_maskthresh;
 
-Nfringes = calibdata.nfringes;
-
-[ysize xsize] = size(datafile);
+[ysize, xsize] = size(datafile);
 
 x = linspace(-0.5,0.5,xsize);
 y = linspace(-0.5,0.5,ysize);
 
-[xg yg] = meshgrid(x,y);
+[xg, yg] = meshgrid(x,y);
 
-m = 3;
+m = 2;
 n = 2;
 
-lambda = (max(x) - min(x))/Nfringes;
-alo = lambda*calibdata.CWT_fringelo;
-ahi = lambda*calibdata.CWT_fringehi;
+alo = calibdata.CWT_lambdalo/xsize;
+ahi = calibdata.CWT_lambdahi/xsize;
 
 theta = linspace(-pi/2, 0.99*pi/2, calibdata.CWT_ntheta);
 a = linspace(alo, ahi,calibdata.CWT_nlambda);
@@ -48,7 +46,7 @@ for tind = 1:length(theta)
         Wold(newinds) = Wnew(newinds);
         Woldref(newindsref) = Wnewref(newindsref);
     end    
-    set(handles.StatusBox, 'String', ['2D CWT ' num2str(round(100*tind/length(theta))) '% complete']); drawnow
+    UpdateStatus(['2D CWT ' num2str(round(100*tind/length(theta))) '% complete'], handles);
 end
 
 apeak = fftshift(apeak);
@@ -66,22 +64,35 @@ phase(:,1:10) = [];
 phase(:,end-9:end) = [];
 phaseref(:,1:10) = [];
 phaseref(:,end-9:end) = [];
+W(:,1:10) = [];
+W(:,end-9:end) = [];
+W = W/max(abs(W(:)));
 
+% figure(1)
 % subplot(3,2,1)
 % imagesc(apeak); fs14; title('\lambda_{calc}')
 % subplot(3,2,2)
 % imagesc(thetapeak); fs14; title('\theta_{calc}')
 % subplot(3,2,3)
-% imagesc(phi); fs14; title('\phi_{calc}')
+% imagesc(phase); fs14; title('\phi_{calc}')
 % subplot(3,2,4)
 % imagesc(real(W)); fs14; title('I_{calc}')
+% subplot(3,2,5)
+% imagesc(abs(W)); fs14; title('I_{calc}')
 % subplot(3,2,6)
-% imagesc(I); fs14; title('I_{real}')
+% imagesc(datafile); fs14; title('I_{real}')
 
 phase = phase - phaseref;
 
+mask = ones(size(phase));
+mask(abs(W) < maskthresh) = 0;
+phase = phase .* mask;
+
 axes(handles.PhasediagAxes)
 imagesc(real(W))
+hold on
+contour(mask, 'Color', 'white')
+hold off
 axis image xy
 axes(handles.PhaseAxes)
 imagesc(phase)

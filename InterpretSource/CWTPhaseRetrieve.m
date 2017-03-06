@@ -1,20 +1,22 @@
-function phaser = CWTPhaseRetrieve(handles)
+function [phaser, mask] = CWTPhaseRetrieve(handles)
 
 data = double(handles.dataimage);
 intref = double(handles.refimage);
 calibdata = handles.calibdata;
+maskthresh = calibdata.CWT_maskthresh;
 
-[Nrows Ncols] = size(data);
-
-rng default % Reset random number generator for reproducible results
+[Nrows, Ncols] = size(data);
+mask = ones(size(data));
 
 t = linspace(0,1,Ncols);
-dt = t(2) - t(1);
 
-[ysize xsize] = size(data);
+[ysize, xsize] = size(data);
 lambda = xsize/calibdata.nfringes;
+lambdalo = calibdata.CWT_lambdalo;
+lambdahi = calibdata.CWT_lambdahi;
 
 count = 0;
+
 for row = 1:Nrows
     
     set(handles.StatusBox, 'String', ['CWT ' num2str(round(100*row/Nrows)) '% complete']); drawnow
@@ -25,27 +27,19 @@ for row = 1:Nrows
     yref = yref - mean(yref);
     y = y/max(abs(y));
     yref = yref/max(yref);
-    sig = struct('val',y,'period',dt);
-    sigref = struct('val',yref,'period',dt);
-    
-    MorletFourierFactor = 2/(6+sqrt(2+6^2));
-    
-    %     omegamin = 200;
-    %     omegamax = 350;
-    %     nscales = 100;
-    %     omegas = linspace(omegamin, omegamax, nscales);
-    %     scales = Ncols./(omegas*MorletFourierFactor)
-    
-    scales = linspace(lambda*calibdata.CWT_fringelo,calibdata.CWT_fringehi*lambda,calibdata.CWT_nlambda);
+
+    scales = linspace(lambdalo, lambdahi, calibdata.CWT_nlambda);
     omegas = 1./scales;
     
     coeffs = cwt(y,scales,'cmor1-1');
     refcoeffs = cwt(yref,scales,'cmor1-1');
     
     for n = 1:length(t)
-        [val index] = max(coeffs(:,n));
-        [valref indexref] = max(refcoeffs(:,n));
+        [val, index] = max(coeffs(:,n));
+        [valref, indexref] = max(refcoeffs(:,n));
         omegar(n) = omegas(index);
+        
+        mask(row, n) = abs(val)*sqrt(omegar(n));
         phase(n) = angle(coeffs(index,n));
         phaseref(n) = angle(refcoeffs(indexref,n));
         yr(n) = real(coeffs(index,n));
@@ -55,8 +49,7 @@ for row = 1:Nrows
     phaseref(isnan(phaseref)) = 0;
     datar(row,:) = yr;
     datarref(row,:) = yrref;
-    phaser(row,:) = unwrap(phase - phaseref);
-    phaser = unwrap(phaser);
+    phaser(row,:) = (phase - phaseref);
     
     yr = yr/max(yr);
     
@@ -78,9 +71,16 @@ for row = 1:Nrows
     
 end
 
-phaser = -(imrotate(phaser, 90));
-phaser = phaser';
-phaser = fliplr(phaser);
+axes(handles.PhasediagAxes)
+imagesc(mask); axis image xy; colorbar; title('Phase mask')
+hold on
+contour(mask, [maskthresh, maskthresh], 'Color', 'white')
+hold off
+
+mask(mask < maskthresh) = 0;
+mask(mask > 0.0) = 1;
+
+phaser = phaser.*(-mask);
 axes(handles.PhaseAxes)
 imagesc(phaser); axis image xy; colorbar
 

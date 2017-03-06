@@ -22,7 +22,7 @@ function varargout = IntGui(varargin)
 
 % Edit the above text to modify the response to help IntGui
 
-% Last Modified by GUIDE v2.5 01-Mar-2017 09:23:33
+% Last Modified by GUIDE v2.5 06-Mar-2017 20:52:32
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -81,20 +81,21 @@ try
                 updateInterpret(srcPrefix);
                 dateinstalled = datestr(now, 'yyyy-mm-dd');
                 save([introot filesep 'dateinstalled.mat'], 'dateinstalled')
-                set(handles.StatusBox,'String', 'Update successful. Please restart Interpret.');
+                UpdateStatus('Update successful. Please restart Interpret.', handles)
             end
         elseif(strcmp(button, 'Skip this version'))
             dateinstalled = datestr(now, 'yyyy-mm-dd');
             save([introot filesep 'dateinstalled.mat'], 'dateinstalled') 
-        else
-            set(handles.StatusBox,'String',['Source last updated ' dategithub char(10) 'Installation date ' dateinstalled]);
+        else      
+            UpdateStatus(['Source last updated ' dategithub char(10) 'Installation date ' dateinstalled], handles)
+            
         end
     else
-        set(handles.StatusBox,'String',['Source last updated ' dategithub char(10) 'Installation date ' dateinstalled]);
+        UpdateStatus(['Source last updated ' dategithub char(10) 'Installation date ' dateinstalled], handles)
     end
 
 catch
-    set(handles.StatusBox,'String', 'There was an authentication error with the Interpret Github repository.');
+    UpdateStatus('There was an authentication error with the Interpret Github repository.', handles)
 end
     
 try
@@ -111,32 +112,20 @@ try
     set(handles.DensityPop, 'Value', guistate.densitymethod)
     set(handles.MediumPop, 'Value', guistate.medium)
 catch
-    set(handles.StatusBox,'String', 'There was an error loading the GUI state. If this error persists try deleting GUIstate.m .');
+    UpdateStatus('There was an error loading the GUI state. If this error persists try deleting GUIstate.m .', handles)
 end
 
 
-% --- Outputs from this function are returned to the command line.
-function varargout = IntGui_OutputFcn(hObject, eventdata, handles)
-% varargout  cell array for returning output args (see VARARGOUT);
-% hObject    handle to figure
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
-% Get default command line output from handles structure
+function varargout = IntGui_OutputFcn(hObject, eventdata, handles)
 varargout{1} = handles.output;
 
 % --------------------------------------------------------------------
 function FileMenu_Callback(hObject, eventdata, handles)
-% hObject    handle to FileMenu (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 
 % --------------------------------------------------------------------
 function OpenMenuItem_Callback(hObject, eventdata, handles)
-% hObject    handle to OpenMenuItem (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 file = uigetfile('*.fig');
 if ~isequal(file, 0)
     open(file);
@@ -144,16 +133,10 @@ end
 
 % --------------------------------------------------------------------
 function PrintMenuItem_Callback(hObject, eventdata, handles)
-% hObject    handle to PrintMenuItem (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 printdlg(handles.figure1)
 
 % --------------------------------------------------------------------
 function CloseMenuItem_Callback(hObject, eventdata, handles)
-% hObject    handle to CloseMenuItem (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 success = saveGUIState(handles);
 if(success)
     delete(handles.figure1)
@@ -162,53 +145,25 @@ end
 
 % --- Executes on selection change in ExpPop.
 function ExpPop_Callback(hObject, eventdata, handles)
-% hObject    handle to ExpPop (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: contents = get(hObject,'String') returns ExpPop contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from ExpPop
-
 
 % --- Executes during object creation, after setting all properties.
 function ExpPop_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to ExpPop (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: popupmenu controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
 data = read_mixed_csv('ExperimentDatabase.csv', ',');
-[nrecords nparams] = size(data);
+[nrecords, nparams] = size(data);
 exps = cell(nrecords-1,1);
 for n = 2:nrecords
     exps{n-1} = data{n,1};
 end
 set(hObject, 'String', exps);
 
-
-
 function MonthBox_Callback(hObject, eventdata, handles)
-% hObject    handle to MonthBox (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of MonthBox as text
-%        str2double(get(hObject,'String')) returns contents of MonthBox as a double
-
 
 % --- Executes during object creation, after setting all properties.
 function MonthBox_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to MonthBox (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
@@ -216,22 +171,9 @@ end
 
 
 function DayBox_Callback(hObject, eventdata, handles)
-% hObject    handle to DayBox (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of DayBox as text
-%        str2double(get(hObject,'String')) returns contents of DayBox as a double
-
 
 % --- Executes during object creation, after setting all properties.
 function DayBox_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to DayBox (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
@@ -239,22 +181,9 @@ end
 
 
 function RunBox_Callback(hObject, eventdata, handles)
-% hObject    handle to RunBox (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of RunBox as text
-%        str2double(get(hObject,'String')) returns contents of RunBox as a double
-
 
 % --- Executes during object creation, after setting all properties.
 function RunBox_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to RunBox (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
@@ -262,22 +191,9 @@ end
 
 
 function ShotBox_Callback(hObject, eventdata, handles)
-% hObject    handle to ShotBox (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of ShotBox as text
-%        str2double(get(hObject,'String')) returns contents of ShotBox as a double
-
 
 % --- Executes during object creation, after setting all properties.
 function ShotBox_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to ShotBox (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
@@ -285,9 +201,6 @@ end
 
 % --- Executes on button press in CalibBut.
 function CalibBut_Callback(hObject, eventdata, handles)
-% hObject    handle to CalibBut (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 set(handles.StatusBox,'String','Reading calibration'); drawnow
 calibration = feval(@(x) x{1}{x{2}},get(handles.CalibPop,{'String','Value'}));
 calibdata = CalibrationDatabase(calibration);
@@ -341,7 +254,7 @@ if(isfield(calibdata, 'Name'))
     guidata(hObject,handles)
     
     axes(handles.ReferenceAxes);
-    set(handles.StatusBox,'String','Loading reference'); drawnow
+    UpdateStatus('Loading reference', handles)
         
     try
         if (strcmp(calibdata.reference(end-2:end), 'raw'))
@@ -353,10 +266,10 @@ if(isfield(calibdata, 'Name'))
             end
         end
         I = I - min(min(I));
-        set(handles.StatusBox,'String','Reference loaded'); drawnow
+        UpdateStatus('Reference loaded', handles)
     catch
         I = ones(size(handles.originaldataimage));
-        set(handles.StatusBox,'String','Reference not found'); drawnow
+        UpdateStatus('Reference not found', handles)
     end
     
     I = imrotate(I, calibdata.rotation);
@@ -369,7 +282,6 @@ if(isfield(calibdata, 'Name'))
     caxis([0 2*mean(mean(I))])
     drawnow
     
-    
 end
 if(~isfield(calibdata, 'Name'))
     set(handles.CalibCheck, 'Value',0,'String','No calibration', 'ForegroundColor', 'red')
@@ -377,9 +289,6 @@ end
 
 % --- Executes on button press in FileBut.
 function FileBut_Callback(hObject, eventdata, handles)
-% hObject    handle to FileBut (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 experiment = feval(@(x) x{1}{x{2}},get(handles.ExpPop,{'String','Value'}));
 month = str2num(get(handles.MonthBox, 'String'));
@@ -413,7 +322,7 @@ if (exist(filename, 'file') ~= 2)
 end
 
 axes(handles.InterferogramAxes);
-set(handles.StatusBox,'String','Reading data file'); drawnow
+UpdateStatus('Reading data file', handles)
 
 if (strcmp(filename(end-2:end), 'raw'))
     I = ReadRAW16bit(filename);
@@ -432,7 +341,7 @@ guidata(hObject,handles)
 
 colormap(gray)
 caxis([0 2*mean(mean(I))])
-set(handles.StatusBox,'String','Data file loaded'); drawnow
+UpdateStatus('Data file loaded', handles)
 if(isfield(handles, 'calibdata'))
     CalibBut_Callback(gcbo, eventdata, handles)
 else
@@ -441,39 +350,15 @@ end
 
 % --- Executes on button press in FileCheck.
 function FileCheck_Callback(hObject, eventdata, handles)
-% hObject    handle to FileCheck (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of FileCheck
-
 
 % --- Executes on button press in CalibCheck.
 function CalibCheck_Callback(hObject, eventdata, handles)
-% hObject    handle to CalibCheck (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of CalibCheck
-
 
 function FileBox_Callback(hObject, eventdata, handles)
-% hObject    handle to FileBox (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of FileBox as text
-%        str2double(get(hObject,'String')) returns contents of FileBox as a double
-
 
 % --- Executes during object creation, after setting all properties.
 function FileBox_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to FileBox (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
 
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
@@ -481,22 +366,10 @@ end
 
 
 function WavelengthBox_Callback(hObject, eventdata, handles)
-% hObject    handle to WavelengthBox (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of WavelengthBox as text
-%        str2double(get(hObject,'String')) returns contents of WavelengthBox as a double
-
 
 % --- Executes during object creation, after setting all properties.
 function WavelengthBox_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to WavelengthBox (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
 
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
@@ -504,22 +377,11 @@ end
 
 % --- Executes on selection change in MediumPop.
 function MediumPop_Callback(hObject, eventdata, handles)
-% hObject    handle to MediumPop (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: contents = cellstr(get(hObject,'String')) returns MediumPop contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from MediumPop
 
 
 % --- Executes during object creation, after setting all properties.
 function MediumPop_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to MediumPop (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
 
-% Hint: popupmenu controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
@@ -527,22 +389,11 @@ end
 
 % --- Executes on selection change in PhasePop.
 function PhasePop_Callback(hObject, eventdata, handles)
-% hObject    handle to PhasePop (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: contents = cellstr(get(hObject,'String')) returns PhasePop contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from PhasePop
 
 
 % --- Executes during object creation, after setting all properties.
 function PhasePop_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to PhasePop (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
 
-% Hint: popupmenu controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
@@ -550,22 +401,10 @@ end
 
 % --- Executes on selection change in DensityPop.
 function DensityPop_Callback(hObject, eventdata, handles)
-% hObject    handle to DensityPop (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: contents = cellstr(get(hObject,'String')) returns DensityPop contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from DensityPop
-
 
 % --- Executes during object creation, after setting all properties.
 function DensityPop_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to DensityPop (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
 
-% Hint: popupmenu controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
@@ -579,30 +418,35 @@ axes(handles.PhaseAxes)
 
 switch RetrievalType
     case 'FFT'
-        set(handles.StatusBox, 'String', 'Beginning FFT phase retrieval'); drawnow
+        UpdateStatus('Beginning FFT phase retrieval', handles)
         phase = PhaseRetrieve(handles);
     case 'CWT'
-        set(handles.StatusBox, 'String', 'Beginning CWT phase retrieval'); drawnow
-        phase = CWTPhaseRetrieve(handles);
-        set(handles.StatusBox, 'String', 'Finished CWT phase retrieval'); drawnow
+        UpdateStatus('Beginning CWT phase retrieval', handles)
+        [phase, mask] = CWTPhaseRetrieve(handles);
+        UpdateStatus('Finished CWT phase retrieval', handles)
     case 'Hilbert'
-        set(handles.StatusBox, 'String', 'Beginning Hilbert phase retrieval'); drawnow
+        UpdateStatus('Beginning Hilbert phase retrieval', handles)
         phase = HilbertPhaseRetrieve(handles);
-        set(handles.StatusBox, 'String', 'Finshed Hilbert phase retrieval'); drawnow
+        UpdateStatus('Finished Hilbert phase retrieval', handles)
     case 'CWT2D'
         set(handles.StatusBox, 'String', 'Beginning CWT2D phase retrieval'); drawnow
-        phase = CWT2DPhaseRetrieve(handles);
+        [phase, mask] = CWT2DPhaseRetrieve(handles);
         set(handles.StatusBox, 'String', 'Finshed CWT2D phase retrieval'); drawnow
 end
 
-if (mean(mean(phase)) < 0)
+if (mean(phase(:)) < 0)
     phase = -phase;
 end
 
 phase(isnan(phase)) = 0;
 
-handles.phase = phase;
-assignin('base','phase',phase)
+if(~exist('mask', 'var'))
+    mask = ones(size(phase));
+end
+
+handles.phase = phase.*mask;
+handles.mask = mask;
+
 guidata(hObject, handles)
 
 
@@ -766,9 +610,11 @@ handles.phase = handles.phase';
 handles.phase = unwrap(handles.phase);
 handles.phase = handles.phase';
 handles.phase = flipud(unwrap(flipud(handles.phase)));
+handles.phase(handles.mask == 0) = 0;
 axes(handles.PhaseAxes)
 imagesc(handles.phase); axis image xy;
 guidata(hObject,handles)
+
 
 % --- Executes on button press in unwrapBottomBtn.
 function unwrapBottomBtn_Callback(hObject, eventdata, handles)
@@ -779,6 +625,7 @@ handles.phase = handles.phase';
 handles.phase = unwrap(handles.phase);
 handles.phase = handles.phase';
 handles.phase = unwrap(handles.phase);
+handles.phase(handles.mask == 0) = 0;
 axes(handles.PhaseAxes)
 imagesc(handles.phase); axis image xy;
 guidata(hObject,handles)
@@ -792,6 +639,7 @@ handles.phase = flipud(unwrap(flipud(handles.phase)));
 handles.phase = handles.phase';
 handles.phase = unwrap(handles.phase);
 handles.phase = handles.phase';
+handles.phase(handles.mask == 0) = 0;
 axes(handles.PhaseAxes)
 imagesc(handles.phase); axis image xy;
 guidata(hObject,handles)
@@ -805,6 +653,7 @@ handles.phase = flipud(unwrap(flipud(handles.phase)));
 handles.phase = imrotate(handles.phase, 90);
 handles.phase = unwrap(handles.phase);
 handles.phase = imrotate(handles.phase, -90);
+handles.phase(handles.mask == 0) = 0;
 axes(handles.PhaseAxes)
 imagesc(handles.phase); axis image xy;
 guidata(hObject,handles)
@@ -875,6 +724,7 @@ function goldsteinBtn_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 set(handles.StatusBox,'String','Select point of known phase'); drawnow
 handles.phase = GoldsteinUnwrap2D(handles.phase, ones(size(handles.phase)), handles);
+handles.phase = handles.phase .* handles.mask;
 axes(handles.PhaseAxes)
 imagesc(handles.phase); axis image xy;
 guidata(hObject,handles)
@@ -1017,9 +867,21 @@ x = round(rect(1));
 y = round(rect(2));
 w = round(rect(3));
 h = round(rect(4));
-handles.phase = handles.phase(y:y+h, x:x+w);
-imagesc(handles.phase); axis image xy;
-guidata(hObject,handles)
+
+[Ny, Nx] = size(handles.phase);
+if (x < 0); x = 1; end
+if (x+w > Nx); w = Nx-x; end
+if (y < 0); y = 1; end
+if (y+h > Ny); h = Ny-y; end
+
+try
+    handles.phase = handles.phase(y:y+h, x:x+w);
+    handles.mask = handles.mask(y:y+h, x:x+w);
+    imagesc(handles.phase); axis image xy;
+    guidata(hObject,handles)
+catch
+    set(handles.StatusBox,'String','Select inside figure'); drawnow
+end
 
 
 
@@ -1312,11 +1174,23 @@ if(length(eventdata.Indices) > 0)
         set(handles.StatusBox,'String','Resize ROI and double click inside when done'); drawnow
         position = wait(himrect);
         delete(himrect)
-        handles.calibdata.x = round(position(1));
-        handles.calibdata.y = round(position(2));
-        handles.calibdata.w = round(position(3));
-        handles.calibdata.h = round(position(4));
+        
         rotatedimage = imrotate(handles.originaldataimage, handles.calibdata.rotation);
+        [Ny, Nx ] = size(rotatedimage);
+        x = round(position(1));
+        y = round(position(2));
+        w = round(position(3));
+        h = round(position(4));
+        if(x < 1); x = 1; end
+        if(x+w>Nx); w = Nx-x; end
+        if(y < 1); y = 1; end
+        if(y+h>Ny); h = Ny-y; end
+        
+        handles.calibdata.x = x;
+        handles.calibdata.y = y;
+        handles.calibdata.w = w;
+        handles.calibdata.h = h;
+        
         handles.dataimage = rotatedimage(handles.calibdata.y:handles.calibdata.y+handles.calibdata.h, handles.calibdata.x:handles.calibdata.x+handles.calibdata.w);
         imagesc(handles.dataimage)
         axis image xy
@@ -1364,10 +1238,14 @@ function removeHotPixelsBtn_Callback(hObject, eventdata, handles)
 % hObject    handle to removeHotPixelsBtn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-handles.phase = RemoveHotPixelButton(handles);
-axes(handles.PhaseAxes)
-imagesc(handles.phase); axis image xy;
-guidata(hObject,handles)
+for n = 1:10
+    handles.phase = RemoveHotPixelButton(handles);
+    axes(handles.PhaseAxes)
+    imagesc(handles.phase); axis image xy; drawnow
+    guidata(hObject,handles)
+    UpdateStatus(['Iteration ' num2str(n) ' of 10.'], handles)
+end
+UpdateStatus('Done', handles)
 
 
 % --------------------------------------------------------------------
@@ -1418,11 +1296,11 @@ for i = 1:length(fig.Children)
     end
 end
 
-function HelpMenu_Callback(hObject, eventdata, handles)
-% hObject    handle to EditMenu (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
+function Help_Callback(hObject, eventdata, handles)
 
 function OnlineHelp_Callback(hObject, eventdata, handles)
-web('https://github.com/jasmcole/Interpret')
+web('https://github.com/jasmcole/Interpret', '-browser')
+
+
+function DeveloperThesis_Callback(hObject, eventdata, handles)
+web('https://spiral.imperial.ac.uk:8443/handle/10044/1/42222', '-browser')

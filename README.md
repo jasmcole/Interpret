@@ -80,10 +80,11 @@ Default calibration entries are
 - `hsmooth1`/`hsmooth2` - smoothing parameters for the Hilbert transform
 - `asmooth` - smoothing parameter for the inverse Abel transform
 - `ymid` - the pixel coordinate of the symmetry axis of the interferogram
-- `nfringes` - the number of fringes in the image, used in the wavelet transforms
-- `CWT_fringelo`/`CWT_fringehi` - the range over which to fit fringe in the CWT methods. Set to 0.5/2 means scan over the range of 50% to 200% of the mean fringe wavelength.
+- `nfringes` - (deprecated) the number of fringes in the image, used in the wavelet transforms
+- `CWT_lambdalo`/`CWT_lambdahi` - the range over which to fit fringes in the CWT methods. Lambda refers to the wavelength of fringes in the image in pixels.
 - `CWT_ntheta` - the number of fringe angles to try in the CWT2D methods
 - `CWT_nlambda` - the number of fringe wavelengths to try in the CWT methods
+- `CWT_maskthresh` - the fit quality threshold at which to define the edge of the phase mask. See the CWT sections below.
 - `Moire_p_um` - the grating pitch if doing Moire deflectometry
 - `Moire_d_mm` - the grating separation if doing Moire deflectometry
 
@@ -97,7 +98,7 @@ There are several methods to retrieve the phase shift.
 
 - Fast, noise tolerant, can suffer from ringing.
 - Works in the Fourier plane - a 2D FFT of the interferogram is displayed in the phase diagnostic axes.
-- Click and drag a rectangle to choose a Fourier region to analyse. Typically one of the lobes either side of the origin.
+- Click and drag a rectangle to choose a Fourier region to analyse. Typically one of the lobes either side of the origin, the location of which will depend on the fringe direction.
 
 <img src="/Images/FFT.png" alt="Calibration" style="width: 400px;"/>
 
@@ -114,13 +115,15 @@ There are several methods to retrieve the phase shift.
 - Slow, can be susceptible to noise, gives most accurate results.
 - Again works row-by-row so the fringes should be close to vertical.
 - Need to set the `CWT_nfringes` parameter to the number of fringes visible in the image.
-- The phase diagnostic axes show the best CWT fit to the local fringe wavelength (blue dots). If the blue dots are all at the lower or upper limits of the plot, change `CWT_nfringes` and 'CWT_fringelo'/`CWT_fringehi` accordingly.
+- The phase diagnostic axes show the best CWT fit to the local fringe wavelength (blue dots). If the blue dots are all at the lower or upper limits of the plot, change `CWT_lambdalo`/`CWT_lambdahi` accordingly.
 - If there is wide variation in fringe wavelength try increasing `CWT_nlambda`. Otherwise keep this at 2 to decrease errors in the fit.
+- Each pixel in the image is assigned a quality of fit. If you want to ignore pixels with a fit quality beneath some threshold, set `CWT_maskthresh` to a non-zero value. The larger the value, the higher the acceptance quality. The outline of the mask is displayed in white on the phase diagnostic axes on the right.
 
 #### CWT2D
 - Fast, susceptible to noise, necessary when fringes are at a large angle.
-- Works in any orientation.
+- Works in any orientation, prefers vertical fringes.
 - Try increasing `CWT_nlambda` and `CWT_ntheta` if the fit is poor.
+- Each pixel in the image is assigned a quality of fit. If you want to ignore pixels with a fit quality beneath some threshold, set `CWT_maskthresh` to a non-zero value. The larger the value, the higher the acceptance quality. The outline of the mask is displayed in white on the phase diagnostic axes on the right.
 
 Unwrap a phase profile
 ----------------------
@@ -162,7 +165,7 @@ Negates the phase.
 
 `Remove hot pixels`
 
-Sometimes, especially after a Volkov unwrap, there will be small residual phase errors. Use this function to remove such errors.
+Sometimes, especially after a Volkov unwrap, there will be small residual phase errors. Use this function to remove such errors. By default this function iterates 10 times.
 
 `Region of interest`
 
