@@ -114,7 +114,7 @@ There are several methods to retrieve the phase shift.
 #### CWT
 - Slow, can be susceptible to noise, gives most accurate results.
 - Again works row-by-row so the fringes should be close to vertical.
-- Need to set the `CWT_nfringes` parameter to the number of fringes visible in the image.
+- Need to set the `CWT_lambdalo` and `CWT_lambdahi` parameters to the smallest and largest wavelengths in the image respectively.
 - The phase diagnostic axes show the best CWT fit to the local fringe wavelength (blue dots). If the blue dots are all at the lower or upper limits of the plot, change `CWT_lambdalo`/`CWT_lambdahi` accordingly.
 - If there is wide variation in fringe wavelength try increasing `CWT_nlambda`. Otherwise keep this at 2 to decrease errors in the fit.
 - Each pixel in the image is assigned a quality of fit. If you want to ignore pixels with a fit quality beneath some threshold, set `CWT_maskthresh` to a non-zero value. The larger the value, the higher the acceptance quality. The outline of the mask is displayed in white on the phase diagnostic axes on the right.
@@ -123,6 +123,7 @@ There are several methods to retrieve the phase shift.
 - Fast, susceptible to noise, necessary when fringes are at a large angle.
 - Works in any orientation, prefers vertical fringes.
 - Try increasing `CWT_nlambda` and `CWT_ntheta` if the fit is poor.
+- Need to set the `CWT_lambdalo` and `CWT_lambdahi` parameters to the smallest and largest wavelengths in the image respectively. If `CWT_lambdalo` is too small, the fit may fail.
 - Each pixel in the image is assigned a quality of fit. If you want to ignore pixels with a fit quality beneath some threshold, set `CWT_maskthresh` to a non-zero value. The larger the value, the higher the acceptance quality. The outline of the mask is displayed in white on the phase diagnostic axes on the right.
 
 Unwrap a phase profile
