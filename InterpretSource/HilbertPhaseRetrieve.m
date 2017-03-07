@@ -7,6 +7,7 @@ calibdata = handles.calibdata;
 [nrows ncols] = size(data);
 
 phase = zeros(size(data));
+mask = zeros(size(data));
 xaxis = 1:ncols;
 
 set(handles.StatusBox, 'String', 'Doing Hilbert transform...'); drawnow
@@ -32,9 +33,10 @@ for n = 1:nrows
     Hyref = hilbert(yref);
     angleHyref = angle(Hyref);
     angleHyref(isnan(angleHyref)) = 0;
-    phase(n,:) = unwrap(angle(Hy) - angleHyref);
+    phase(n,:) = (angle(Hy) - angleHyref);
     imorig(n,:) = y;
     imref(n,:) = yref;
+    mask(n,:) = (yplot - (ysmooth+movav));
     count = count + 1;
     if (count > nrows/10)
         count = 0;
@@ -42,31 +44,18 @@ for n = 1:nrows
         axes(handles.PhasediagAxes)
         x = 1:length(y);
         plot(x,yplot,x,ysmooth+movav, x,movav)
-        set(handles.StatusBox, 'String', ['Doing Hilbert transform...' percentdone]); drawnow
+        UpdateStatus(['Doing Hilbert transform...' percentdone], handles);
     end
     
 end
 
-%Remove edges to get rid of problems
-phase(:,1:10) = [];
-phase(:,end-9:end) = [];
-
-phase = flipud(phase);
-phase = flipud(unwrap(flipud(phase)));
-phase = imrotate(phase, 90);
-
-phase = unwrap(phase);
-
-phase = imrotate(phase, 90);
-phase = fliplr(phase);
-imorig = imorig;
-
 axes(handles.PhaseAxes)
 imagesc(phase)
 axis image xy
+title('Phase')
 colorbar
 axes(handles.PhasediagAxes)
 imagesc(imorig)
 axis image xy
-
+title('Filtered image')
 end

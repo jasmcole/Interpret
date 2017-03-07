@@ -71,6 +71,9 @@ for row = 1:Nrows
     
 end
 
+
+mask = mask/max(mask(:));
+
 axes(handles.PhasediagAxes)
 imagesc(mask); axis image xy; colorbar; title('Phase mask')
 hold on
