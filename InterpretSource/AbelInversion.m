@@ -57,15 +57,15 @@ ncrit = 1748e24 * (800e-9/lambda)^2;
 %rho_atm=(P/RT)*Na
 rho_atm=(101.325e3*6.022e23)/(8.31*273); %units m^-3
 
+% From http://www.kayelaby.npl.co.uk/general_physics/2_5/2_5_7.html
 switch gas
     case 'Argon'
         k = 0.000281;
+    case 'Helium'
+        k = 0.000035;
     case 'Nitrogen'
-        k = 0.000265;
-    case 'Plasmaold'
-        k = (1.6e-19)^2*lambda^2*rho_atm/(8*pi^2 * 9.11e-31 * 8.85e-12 * 9e16);
+        k = 0.000298;
     case 'Plasma'
-        %ncrit for 800nm in m^-3
         k = rho_atm/(2*ncrit);
 end
 
