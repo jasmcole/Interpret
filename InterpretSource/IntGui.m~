@@ -115,12 +115,6 @@ catch
     UpdateStatus('There was an error loading the GUI state. If this error persists try deleting GUIstate.m .', handles)
 end
 
-try
-    updateCalibPop(handles.CalibPop, handles);
-catch
-    UpdateStatus('There was an error loading the Calibration Database.', handles)
-end
-
 
 
 function varargout = IntGui_OutputFcn(hObject, eventdata, handles)
@@ -594,9 +588,13 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
+updateCalibPop(hObject, handles)
+
+
 function updateCalibPop(hObject, handles)
+print(hn
 data = read_mixed_csv([handles.introot filesep 'CalibrationDatabase.csv'], ',');
-[nparams, nrecords] = size(data);
+[nparams nrecords] = size(data);
 exps = cell(nrecords-1,1);
 for n = 2:nrecords
     exps{n-1} = data{1,n};
@@ -793,8 +791,6 @@ newcalbtn.Position = [10 height-160 100 20];
 
 function newCalibOK_Callback(hObject, eventdata)
 
-handles = hObject.UserData;
-
 data = read_mixed_csv([handles.introot filesep 'CalibrationDatabase.csv'], ',');
 [nparams nrecords] = size(data);
 copyfromcolumn = hObject.Parent.Children(2).Value + 1;
@@ -807,6 +803,8 @@ data{1,nrecords+1} = hObject.Parent.Children(4).String;
 for n = 2:nparams
     data{n,nrecords+1} = data{n,copyfromcolumn};
 end
+
+handles = hObject.UserData;
 
 copyfile([handles.introot filesep 'CalibrationDatabase.csv'], [handles.introot filesep 'CalibrationDatabase_backup.csv'])
 cell2csv([handles.introot filesep 'CalibrationDatabase.csv'], data, ',')
