@@ -13,8 +13,13 @@ for n = 1:length(srcFiles)
 
     fname = srcFiles(n).name;
 
-    srcFile = webread(['https://api.github.com/repos/jasmcole/Interpret/contents/InterpretSource/' fname], optionsText);
-    dlURL = srcFile.download_url;
+    try
+        srcFile = webread(['https://api.github.com/repos/jasmcole/Interpret/contents/InterpretSource/' fname], optionsText);
+        dlURL = srcFile.download_url;
+    catch
+        dlURL = ['https://github.com/jasmcole/Interpret/blob/master/InterpretSource/' fname '?raw=true'];
+    end
+    
     fileContents = webread(dlURL, optionsBinary);
     waitbar(n/length(srcFiles), hWait, ['Downloaded ' fname])
     
