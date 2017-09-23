@@ -22,7 +22,7 @@ function varargout = IntGui(varargin)
 
 % Edit the above text to modify the response to help IntGui
 
-% Last Modified by GUIDE v2.5 06-Mar-2017 20:52:32
+% Last Modified by GUIDE v2.5 23-Sep-2017 13:03:52
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -1307,3 +1307,11 @@ web('https://github.com/jasmcole/Interpret', '-browser')
 
 function DeveloperThesis_Callback(hObject, eventdata, handles)
 web('https://spiral.imperial.ac.uk:8443/handle/10044/1/42222', '-browser')
+
+
+% --- Executes on button press in nonlocalunwrapBtn.
+function nonlocalunwrapBtn_Callback(hObject, eventdata, handles)
+handles.phase = NonlocalUnwrap(handles);
+axes(handles.PhaseAxes)
+imagesc(handles.phase); axis image xy;
+guidata(hObject,handles)

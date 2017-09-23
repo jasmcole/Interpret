@@ -27,10 +27,15 @@ for i = 2:Ny-1
     end
 end
 
-[~, eind] = sort(-edges(:));
 % eind(1) contains most reliable edge
+[~, eind] = sort(-edges(:));
 
-for n = 1:length(edges(edges > 0))
+Numgoodedges = length(edges(edges > 0));
+
+wbar = waitbar(0,'Traversing edges...');
+
+% Some edges we ignore, i.e. the corners of the image
+for n = 1:Numgoodedges
     ind = eind(n);
     [ie, je] = ind2sub(size(edges), ind);
     [isource, jsource] = ind2sub(size(I), ie);
@@ -93,13 +98,6 @@ for n = 1:length(edges(edges > 0))
             groups(isource, jsource) = g2;
         end
         
-        % Pixels in same group
-        if g1 > 0 && g2 > 0 && g1 == g2
-            if abs(I1 - I2) > THRESH
-                disp('This is odd')
-            end
-        end
-        
         % Pixels in different groups
         if g1 > 0 && g2 > 0 && g1 ~= g2
             g1size = length(groups(groups == g1));
@@ -126,26 +124,23 @@ for n = 1:length(edges(edges > 0))
         end
         
     catch
-        % Couldn't access something
+        % Couldn't access something? TODO: Check this doesn't happen
+    end
+    
+    if ~mod(n,100000)
+        waitbar(n/Numgoodedges)
+        n
     end
 end
 
+close(wbar);
+
+% Add corners manually
 I(1,1) = 0.5*(I(1,2)+I(2,1));
 I(1,end) = 0.5*(I(1,end-1)+I(2,end));
 I(end,1) = 0.5*(I(end,2)+I(end-1,1));
 I(end,end) = 0.5*(I(end,end-1)+I(end-1,end));
 
 phase = I;
-
-
-
-
-
-
-
-
-
-
-
 
 end
